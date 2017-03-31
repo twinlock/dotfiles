@@ -53,10 +53,6 @@ nnoremap Q @q
 
 " ======= PLUGIN Keybindings=========
 " PLUGINS! {
-  " Gundo {
-    nnoremap <Leader>pgu :GundoToggle<CR>
-  " }
-
   " CtrlP {
   " I will forget these, so im mapping it to a bunch of things i may think of
     nnoremap <leader>ppb :CtrlPBuffer<CR>
@@ -92,12 +88,12 @@ nnoremap Q @q
   "
 
   " rainbowparens {
-    nnoremap <Leader>0 :RainbowParenthesesToggle<CR>
+    nnoremap <Leader>prp :RainbowToggle<CR>
   " }
 
   " gundo {
-    nnoremap <Leader>pgu :GundoToggle<CR>
-    nnoremap <Leader>pgut :GundoToggle<CR>
+    nnoremap <Leader>pu :GundoToggle<CR>
+    nnoremap <Leader>put :GundoToggle<CR>
   " }
 
   " deoplete {
@@ -117,5 +113,20 @@ nnoremap Q @q
     nnoremap <leader>si :ScalaImport<CR>
     nnoremap <leader>sji :JavaImportOrganize<CR>
     nnoremap <leader>ssi :SortScalaImports<CR>
+  " }
+  " git_gutter {
+    nnoremap <leader>pggt :GitGutterToggle<CR>
+    nnoremap <leader>pggn :GitGutterNextHunk<CR>
+    nnoremap <leader>pggp :GitGutterPrevHunk<CR>
+    nnoremap <leader>pggs :GitGutterStageHunk<CR>
+    nnoremap <leader>pggu :GitGutterUndoHunk<CR>
+    nnoremap <leader>pggv :GitGutterPreviewHunk<CR>
+
+    nnoremap <leader>pgt :GitGutterToggle<CR>
+    nnoremap <leader>pgn :GitGutterNextHunk<CR>
+    nnoremap <leader>pgp :GitGutterPrevHunk<CR>
+    nnoremap <leader>pgs :GitGutterStageHunk<CR>
+    nnoremap <leader>pgu :GitGutterUndoHunk<CR>
+    nnoremap <leader>pgv :GitGutterPreviewHunk<CR>
   " }
 " }

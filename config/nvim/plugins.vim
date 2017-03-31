@@ -132,6 +132,18 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'bronson/vim-visual-star-search'
 " }
 
+" ============== GIT ==============
+" Git gutter shows which lines have been edited
+" git gutter {
+  Plug 'airblade/vim-gitgutter'
+  " i hate it when plugins take over keys
+  let g:gitgutter_map_keys = 0
+" }
+" classic git plugin
+" git fugitive {
+  Plug 'tpope/vim-fugitive'
+" }
+
 " ============== random ==============
 " Delete surrounding parens
 " surround {
