@@ -5,6 +5,7 @@ filetype plugin indent on
 syntax on
 set visualbell
 set encoding=utf8
+set clipboard=unnamed
 
 " vim format stuff {
   set autoindent

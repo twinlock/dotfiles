@@ -55,7 +55,6 @@ call plug#begin('~/.config/nvim/plugged')
   let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$', '^\.pants.d$']
 " }
 
-
 " ctrlp {
   Plug 'ctrlpvim/ctrlp.vim'
   let g:ctrlp_match_window = 'order:ttb,max:20'
@@ -156,6 +155,11 @@ call plug#begin('~/.config/nvim/plugged')
 " Pants build syntax
 " vim-pants {
   Plug 'pantsbuild/vim-pants'
+" }
+" Fixng copy paste shit
+" focus-events {
+  Plug 'tmux-plugins/vim-tmux-focus-events'
+  Plug 'roxma/vim-tmux-clipboard'
 " }
 
 call plug#end()
