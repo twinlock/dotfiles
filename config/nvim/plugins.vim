@@ -20,7 +20,8 @@ call plug#begin('~/.config/nvim/plugged')
 " colorschemes and handy dandy statusline things
 " Plug 'joshdick/onedark.vim'
 
-" this requires patched fonts, remember~
+" this requires patched fonts, remember~ to get one from:
+"   https://github.com/ryanoasis/nerd-fonts
 " Airline {
   Plug 'vim-airline/vim-airline'
   let g:airline#extensions#tabline#enabled = 1
@@ -38,11 +39,8 @@ call plug#begin('~/.config/nvim/plugged')
 
 " Color nested matching parentheses with different colors
 " Rainbowparens {
-  Plug 'kien/rainbow_parentheses.vim'
-  au VimEnter * RainbowParenthesesToggle
-  au Syntax * RainbowParenthesesLoadRound
-  au Syntax * RainbowParenthesesLoadSquare
-  au Syntax * RainbowParenthesesLoadBraces
+  Plug 'luochen1990/rainbow'  
+  let g:rainbow_active = 1
 " }
 " devicons {
   Plug 'ryanoasis/vim-devicons'
