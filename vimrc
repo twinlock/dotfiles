@@ -11,12 +11,13 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
+" plugin from http://vim-scripts.org/vim/scripts.html
+Plugin 'L9'
+
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
 Plugin 'tpope/vim-fugitive'
-" plugin from http://vim-scripts.org/vim/scripts.html
-Plugin 'L9'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'JavaDecompiler.vim'
 
@@ -24,9 +25,9 @@ Plugin 'JavaDecompiler.vim'
 Plugin 'derekwyatt/vim-scala'
 
 "Python
-Plugin 'hynek/vim-python-pep8-indent'
+"Plugin 'hynek/vim-python-pep8-indent'
 "Plugin 'nvie/vim-flake8'
-Plugin 'heavenshell/vim-pydocstring'
+"Plugin 'heavenshell/vim-pydocstring'
 
 Plugin 'Valloric/YouCompleteMe'
 " auto syntax highlighting~
@@ -56,6 +57,12 @@ Plugin 'tpope/vim-dispatch'
 
 " Easily navigate vim's undo tree visually
 Plugin 'sjl/gundo.vim'
+
+" Easily move windows around using <leader>ww 
+Plugin 'wesQ3/vim-windowswap'
+
+" PANTS!
+Plugin 'edma2/vim-pants'
 call vundle#end()            " required
 filetype plugin indent on    " required
 syntax on
@@ -65,6 +72,8 @@ set visualbell
 let mapleader = " "
 " make the current window size 80 (actually 86 to accomidate line numbers)
 nnoremap <leader>ws :vertical resize 107 <CR>
+nnoremap <leader>wm :vertical resize 20 <CR>
+nnoremap <leader>wl :vertical resize 60 <CR>
 nnoremap Q @q
 " Some nice shortcuts:
 " Enter/leave numbers .
@@ -84,18 +93,21 @@ nnoremap gc :%s/[ <Tab>]\+$//<CR>
 " stop searching wiht ctrl-m
 nnoremap <silent> <C-m> :silent noh<CR>
 nnoremap <C-n> :NERDTreeToggle<CR>
-cmap W w
+nnoremap <C-N> :NERDTreeToggle<CR>
+nnoremap <leader>gntf :NERDTreeFind<CR>
+nnoremap <leader>gntt :NERDTreeToggle<CR>
+
 
 map <F1> <Esc>
 imap <F1> <Esc>
-" move windows with alt arrow
+" move windows with leader arrow
 nnoremap <silent> <Leader>h :wincmd h<CR>
 nnoremap <silent> <Leader>j :wincmd j<CR>
 nnoremap <silent> <Leader>k :wincmd k<CR>
 nnoremap <silent> <Leader>l :wincmd l<CR>
 " set F8 and leader gt for tagbar (code summary)
 nmap <F8> :TagbarToggle<CR>
-nmap <leader>gt :TagbarToggle<CR>
+nnoremap <leader>gt :TagbarToggle<CR>
 " incremental search (better search)
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
@@ -106,8 +118,8 @@ map N  <Plug>(incsearch-nohl-N)
 " pydoc
 nmap <silent> <C-_> <Plug>(pydocstring)
 
-nnoremap <Leader>g :GundoToggle<CR>
-nnoremap <leader>c :!ctags -R $(git rev-parse --show-toplevel) && echo "Done generating ctags"<CR>
+nnoremap <Leader>gu :GundoToggle<CR>
+nnoremap <leader>c :!ctags --exclude=*.js -R $(git rev-parse --show-toplevel) && echo "Done generating ctags"<CR>
 nnoremap <leader>t :CtrlPTag<cr>
 function! ToggleNERDTreeAndTagbar()
   let w:jumpbacktohere = 1
@@ -192,10 +204,15 @@ nnoremap <Leader>g :GundoToggle<CR>
 
 " eclim things
 nnoremap <leader>jc :JavaCorrect<CR>
+nnoremap <leader>jdc :JavaDocComment<CR>
 nnoremap <leader>jch :JavaCallHierarchy<CR>
+nnoremap <leader>jh :JavaHierarchy<CR>
 nnoremap <leader>ji :JavaImport<CR>
 nnoremap <leader>si :ScalaImport<CR>
+nnoremap <leader>sji :JavaImportOrganize<CR>
 nnoremap <leader>ssi :SortScalaImports<CR>
+" CtrlP Remaps
+nnoremap <leader>b :CtrlPBuffer<CR>
 
 " Remap colon to semicolon and vis-versa
 nnoremap : ;
@@ -241,7 +258,7 @@ let g:ctrlp_working_path_mode = 'acr'
 " CtrlP window appears at bottom instead of top
 let g:ctrlp_match_window_bottom = 1
 
-set wildignore+=*.o,*.obj,.git,*.class,*.so,*.swp,*.zip,*.class,*.tar.gz,*.tgz,*.tar,*.gzip,*.jar,*.pyc
+set wildignore+=*.o,*.obj,.git,*.class,*.so,*.swp,*.zip,*.class,*.tar.gz,*.tgz,*.tar,*.gzip,*.jar,*.pyc,*.orig,.pants*
 "*/lib/python3.5/*,*/build/*,refined*/*,./*virtualenv/*,*/__pycache__/*,
 
 " use emacs-style tab completion when selecting files, etc
@@ -288,9 +305,9 @@ let g:EclimPythonValidate = 0
 let g:python_pep8_indent_multiline_string = 1
 " YCM
 " YCM's identifier completer will also collect identifiers from tags files
-"let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_python_binary_path = "python3"
+let g:ycm_python_binary_path = "python"
 " incsearch
 " :h g:incsearch#auto_nohlsearch
 set hlsearch
@@ -314,8 +331,7 @@ let g:tagbar_type_scala = {
         \ 'm:methods'
     \ ]
 \ }
-" Show line numbers with NT
-let g:NERDTreeShowLineNumbers=1
+" NERDtree things 
 let g:NERDTreeDirArrows=0
 let g:NERDTreeShowBookmarks=1
 " Allow backspacing beyond start of insert mode
@@ -333,7 +349,7 @@ au Syntax * RainbowParenthesesLoadBraces
 " If editing a scala file, set the makeprg to compile with gradle
 au BufNewFile,BufRead *.scala set makeprg=gradle\ test\ --console=plain
 let g:scala_sort_across_groups=1
-let g:scala_first_party_namespaces='\(com.metabiota\|controllers\|views\|models\)'
+let g:scala_first_party_namespaces='\(com.squareup\|controllers\|views\|models\)'
 " associate *.avsc with json filetype
 au BufRead,BufNewFile *.avsc setfiletype json
 au BufRead,BufNewFile *.avsc set shiftwidth=4 tabstop=4
@@ -364,10 +380,13 @@ if executable('ag')
   " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 
-  " ag is fast enough that CtrlP doesn't need to cache
-  let g:ctrlp_use_caching = 0
+  " ag is almost fast enough that CtrlP doesn't need to cache, but not when using java
+  " let g:ctrlp_use_caching = 0
 endif
 let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_match_window = 'order:ttb,max:20'
+" dont serch but every 250ms, eliminates some annoying fumble finger behavior
+let g:ctrlp_lazy_update = 150
 " ===== Colory things  ==============================================
 
 colorscheme gruvbox
