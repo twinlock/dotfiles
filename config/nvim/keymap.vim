@@ -45,6 +45,8 @@ let mapleader = " "
   nnoremap <leader>gg :e#<CR>
   " Turn on word-wrapping.
   nnoremap <leader>gw :se tw=99<CR>
+  " clean out trialing whitespace
+  nnoremap <leader>gc :%s/\s\+$//g<CR>
 " }
 
 
@@ -110,6 +112,8 @@ nnoremap Q @q
     nnoremap <leader>jch :JavaCallHierarchy<CR>
     nnoremap <leader>jh :JavaHierarchy<CR>
     nnoremap <leader>ji :JavaImport<CR>
+    nnoremap <leader>jf :JavaFormat<CR>
+    nnoremap <leader>jv :Validate<CR>
     nnoremap <leader>si :ScalaImport<CR>
     nnoremap <leader>sji :JavaImportOrganize<CR>
     nnoremap <leader>ssi :SortScalaImports<CR>
