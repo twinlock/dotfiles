@@ -31,6 +31,9 @@ let mapleader = " "
   nnoremap <silent> <Leader>k :wincmd k<CR>
   nnoremap <silent> <Leader>l :wincmd l<CR>
 " }
+" terminal {
+  tnoremap <Esc> <C-\><C-n>
+" }
 
 " BASIC VIM FUCNTIONS {
   " stop searching wiht gm
@@ -77,6 +80,15 @@ nnoremap Q @q
     map g/ <Plug>(incsearch-stay)
     map n  <Plug>(incsearch-nohl-n)
     map N  <Plug>(incsearch-nohl-N)
+  " }
+  " esearch {
+    " Start esearch prompt autofilled with one of g:esearch.use initial patterns
+    call esearch#map('<leader>pff', 'esearch')
+    " Start esearch autofilled with a word under the cursor
+    call esearch#map('<leader>pfw', 'esearch-word-under-cursor')
+  " }
+  " vim-maximizer {
+    noremap <leader>pmw :MaximizerToggle<CR>
   " }
 
   " gen_tags {

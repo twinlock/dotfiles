@@ -126,6 +126,17 @@ call plug#begin('~/.config/nvim/plugged')
     set grepprg=ag\ --nogroup\ --nocolor
   endif
 " }
+" similar to sublime's find replace:
+" esearch {
+  Plug 'eugen0329/vim-esearch'
+  let g:esearch = {
+        \ 'adapter':    'ag',
+        \ 'backend':    'nvim',
+        \ 'out':        'win',
+        \ 'batch_size': 1000,
+        \ 'use':        ['visual', 'hlsearch', 'last'],
+        \}
+" }
 " Use * on visually selected text to search for it
 " visual star search {
   Plug 'bronson/vim-visual-star-search'
@@ -152,6 +163,10 @@ call plug#begin('~/.config/nvim/plugged')
 " windowswap {
   Plug 'wesQ3/vim-windowswap'
 " }
+" maximize windows
+" vim-maximizer {
+  Plug 'szw/vim-maximizer'
+" }
 " Pants build syntax
 " vim-pants {
   Plug 'pantsbuild/vim-pants'
@@ -160,6 +175,9 @@ call plug#begin('~/.config/nvim/plugged')
 " focus-events {
   Plug 'tmux-plugins/vim-tmux-focus-events'
   Plug 'roxma/vim-tmux-clipboard'
+" }
+" session management {
+  Plug 'tpope/vim-obsession'
 " }
 
 call plug#end()

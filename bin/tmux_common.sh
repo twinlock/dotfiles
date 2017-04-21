@@ -39,7 +39,7 @@ else
 
         echo "Launching copy of base session $base_session ..."
         # Session is is date and time to prevent conflict
-        session_id=`date +%Y%m%d%H%M%S`
+        session_id="tess@$(date +%m%d%H%M%S)"
         # Create a new session (without attaching it) and link to base session 
         # to share windows
         tmux -u new-session -d -t $base_session -s $session_id
