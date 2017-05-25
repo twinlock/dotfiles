@@ -6,6 +6,8 @@ import click
 import re
 import os
 import yaml
+import psutil
+
 from pathlib import Path
 from os import path
 from shutil import which
@@ -27,6 +29,8 @@ def cli(): pass
 def fix_classpath(repo_name, eclipse_project_name, repo_dir, targets):
     """pants and eclipse (neon at least) are not really compatible, this fixes various issues found
     in the classpath"""
+    if not check_eclim_running():
+        return
     # first check the config to see if the repo exists, if not
     # add the repo and all the targets using the add_repo method
     repo_cfg = fetch_or_create_cfg(repo_name, repo_dir, eclipse_project_name, list(targets))
@@ -83,6 +87,8 @@ def fix_classpath(repo_name, eclipse_project_name, repo_dir, targets):
 @click.argument("targets", nargs=-1)
 def pants_build_eclipse(repo_name, eclipse_project_name, repo_dir, targets):
     """buid/rebuild the specified project and add it to eclipse"""
+    if not check_eclim_running():
+        return
     repo_cfg = fetch_or_create_cfg(repo_name, repo_dir, eclipse_project_name, list(targets))
     if not repo_cfg:
         return
@@ -106,6 +112,8 @@ def pants_build_eclipse(repo_name, eclipse_project_name, repo_dir, targets):
 @click.argument("targets", nargs=-1)
 def pants_clean_rebuild_eclipse(repo_name, eclipse_project_name, repo_dir, targets):
     """same as build eclipse, except delete the project from eclipse and reset pants"""
+    if not check_eclim_running():
+        return
     repo_cfg = fetch_or_create_cfg(repo_name, repo_dir, eclipse_project_name, list(targets))
     if not repo_cfg:
         return
@@ -293,6 +301,18 @@ def fetch_or_create_cfg(repo_name, repo_dir, eclipse_project_name, targets, upda
         repo_cfg = cfg[proper_repo]
     return repo_cfg
 
+def check_eclim_running():
+    eclim = False
+    eclipse = False
+    for p in psutil.process_iter():
+        if 'eclim' in p.name :
+            eclim = True
+        if 'eclipse' in p.name :
+            eclipse = True
+    if not eclim and not eclipse:
+        print("need both eclipse and eclim running")
+        print_loud("START ECLIM")
+    return eclim and eclipse
 
 # commands to add:
 #   fresh_start: delete the current project, then recreate it
