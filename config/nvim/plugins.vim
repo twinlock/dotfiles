@@ -45,6 +45,9 @@ call plug#begin('~/.config/nvim/plugged')
 " devicons {
   Plug 'ryanoasis/vim-devicons'
 " }
+" vim-slim {
+  Plug 'slim-template/vim-slim'
+" }
 
 " ============== file movement ==============
 " NerdTree {
@@ -91,6 +94,7 @@ call plug#begin('~/.config/nvim/plugged')
   " Use deoplete.
   let g:deoplete#enable_at_startup = 1
 " }
+" Java:
 " Eclim works, we just map it to ctrl space
 " Eclim {
   let g:EclimCompletionMethod = 'omnifunc'
@@ -102,6 +106,23 @@ call plug#begin('~/.config/nvim/plugged')
 " }
 " Neomake {
   Plug 'neomake/neomake'
+  autocmd! BufWritePost *.rb :Neomake
+" }
+" Python:
+" Jedi {
+  Plug 'zchee/deoplete-jedi'
+" }
+" Ruby:
+" vim-ruby { 
+  Plug 'vim-ruby/vim-ruby'
+" }
+" Rails support (:A, :R, :Rmigration, :Rextract)
+" vim-rails {
+  Plug 'tpope/vim-rails', { 'for': ['ruby', 'eruby', 'haml', 'slim'] }
+" }
+" Bundler support (plays nicely with tpope/gem-ctags)
+" vim-bundler {
+  Plug 'tpope/vim-bundler', { 'for': ['ruby', 'eruby', 'haml', 'slim'] }
 " }
 
 " ============== tags/search related ==============
@@ -141,7 +162,6 @@ call plug#begin('~/.config/nvim/plugged')
 " visual star search {
   Plug 'bronson/vim-visual-star-search'
 " }
-
 " ============== GIT ==============
 " Git gutter shows which lines have been edited
 " git gutter {
