@@ -302,17 +302,14 @@ def fetch_or_create_cfg(repo_name, repo_dir, eclipse_project_name, targets, upda
     return repo_cfg
 
 def check_eclim_running():
-    eclim = False
     eclipse = False
     for p in psutil.process_iter():
-        if 'eclim' in p.name :
-            eclim = True
-        if 'eclipse' in p.name :
+        if 'eclipse' in p.name():
             eclipse = True
-    if not eclim and not eclipse:
+    if not eclipse:
         print("need both eclipse and eclim running")
-        print_loud("START ECLIM")
-    return eclim and eclipse
+        print_loud("START ECLIPSE")
+    return eclipse
 
 # commands to add:
 #   fresh_start: delete the current project, then recreate it
