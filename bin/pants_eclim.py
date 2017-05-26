@@ -205,8 +205,8 @@ def add_targets(repo_name, targets):
         proper_repo = repo_name or find_repo(cfg)
         if proper_repo not in cfg:
             cfg[repo_name] = {"targets": [], "location": os.getcwd()}
-        filtered = [tgt for tgt in targets if tgt not in cfg[repo_name]["targets"]]
-        cfg[repo_name]["targets"].extend(filtered)
+        filtered = [tgt for tgt in targets if tgt not in cfg[proper_repo]["targets"]]
+        cfg[proper_repo]["targets"].extend(filtered)
         dump = yaml.dump(cfg)
         f.write(dump)
 
@@ -224,11 +224,12 @@ def del_targets(repo_name, targets):
         return
     with open(config_fname, 'r+') as f:
         cfg = yaml.load(f) or {}
-        if repo_name not in cfg:
+        proper_repo = repo_name or find_repo(cfg)
+        if proper_repo not in cfg:
             print("repo '%s' was not found in the config, maybe misspelled?")
             return
-        filtered_tgts = [tgt for tgt in cfg[repo_name]["targets"] if tgt not in targets]
-        cfg[repo_name]["targets"] = filtered_tgts
+        filtered_tgts = [tgt for tgt in cfg[proper_repo]["targets"] if tgt not in targets]
+        cfg[proper_repo]["targets"] = filtered_tgts
         dump = yaml.dump(cfg)
         f.write(dump)
 
