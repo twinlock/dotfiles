@@ -33,7 +33,8 @@ def fix_classpath(repo_name, eclipse_project_name, repo_dir, targets):
         return
     # first check the config to see if the repo exists, if not
     # add the repo and all the targets using the add_repo method
-    repo_cfg = fetch_or_create_cfg(repo_name, repo_dir, eclipse_project_name, list(targets))
+    repo_cfg = fetch_or_create_cfg(repo_name, repo_dir, eclipse_project_name,
+            list(targets) if targets else [])
     if not repo_cfg:
         return
     repo_dir = repo_cfg["location"]
@@ -89,21 +90,24 @@ def pants_build_eclipse(repo_name, eclipse_project_name, repo_dir, targets):
     """buid/rebuild the specified project and add it to eclipse"""
     if not check_eclim_running():
         return
-    repo_cfg = fetch_or_create_cfg(repo_name, repo_dir, eclipse_project_name, list(targets))
+    targets_list = list(targets) if targets else []
+    repo_cfg = fetch_or_create_cfg(repo_name, repo_dir, eclipse_project_name, targets_list)
     if not repo_cfg:
         return
     repo_dir = repo_cfg["location"]
     eclipse_project_name = repo_cfg["eclipse_project_name"]
-    cleaned_targets = repo_cfg["targets"]
-
+    cleaned_targets = [proj.strip() for proj in targets_list or repo_cfg["targets"]]
+    merged_targets = repo_cfg["targets"] \
+            + [tgt for tgt in cleaned_targets if tgt not in repo_cfg["targets"]]
     print("compiling all pants targets %s" % cleaned_targets)
     subprocess.run(["pants","compile"] + [proj + "::" for proj in cleaned_targets], check=True)
-    print("creating eclipse project from targets %s" % cleaned_targets)
+    print("creating eclipse project from targets %s" % merged_targets)
     subprocess.run(["pants","eclipse","--eclipse-project-name=" + eclipse_project_name]
-            + [proj + "::" for proj in cleaned_targets], check=True)
-    fix_classpath(repo_name, eclipse_project_name, repo_dir, targets)
+            + [proj + "::" for proj in merged_targets], check=True)
     # This wont do anything if your project is already installed
+    print("adding eclipse project found at %s" % repo_dir)
     subprocess.run(["vim","-c", "'ProjectImport %s'" % repo_dir, "+qall" ], check=True)
+    fix_classpath(repo_name, eclipse_project_name, repo_dir, merged_targets)
 
 @cli.command()
 @click.option("--repo_name", help="name of the repository, doesnt need to match anything")
@@ -228,6 +232,26 @@ def del_targets(repo_name, targets):
         dump = yaml.dump(cfg)
         f.write(dump)
 
+@cli.command()
+@click.option("--eclipse_install_loc",
+        help="where the eclipse app is installed, looking for the Eclipse.app directory")
+@click.option("--default_workspace_loc")
+def locate_eclipse(eclipse_install_location, default_workspace_loc):
+    if not eclipse_install_loc or not default_workspace_loc:
+        print("must specify an install location and a workspace dir")
+        print_loud("Why not try harder next time.")
+    config_fname, ignored = init_config()
+    if not config_fname:
+        return
+    with open(config_fname, 'r+') as f:
+        cfg = yaml.load(f) or {}
+        general_cfg = cfg.get("general") or {}
+        general_cfg["eclipse_install_location"] = eclipse_install_location
+        general_cfg["default_workspace_loc"] = default_workspace_loc
+        cfg["general"] = general_cfg
+        dump = yaml.dump(cfg)
+        f.write(dump)
+
 def config_filename():
     return path.join(CONFIG_DIR, "config.yaml")
 
@@ -312,14 +336,17 @@ def check_eclim_running():
     return eclipse
 
 # commands to add:
-#   fresh_start: delete the current project, then recreate it
+#   eclipse_install
 #   configure_eclipse: needs to setup things like square style, google's formatter, etc.
+#      org.eclipse.core.runtime/.settings/org.eclipse.jdt.ui.prefs
 # commands to fix:
 #
 
 # yaml structure ideas:
-# global: # project settings applied to everything
-#   # acts just like a project
+# global: # eclipse settings applied to everything
+#   eclipse_install_location:  this is where things like eclim will get installed
+#   primary_workspace_location: this is where settings like which formatter to use will get
+#     installed
 # java: # <= doesnt just need to be the java project, but it will be
 #   eclipse_project_name: 'sq_java' # name for the project
 #   project_location: 'absolute path to project' # name for the project
