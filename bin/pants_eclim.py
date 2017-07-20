@@ -30,6 +30,7 @@ def fix_classpath(repo_name, eclipse_project_name, repo_dir, targets):
     """pants and eclipse (neon at least) are not really compatible, this fixes various issues found
     in the classpath"""
     if not check_eclim_running():
+        print_loud("RUN CMD fix_classpath AGAIN")
         return
     # first check the config to see if the repo exists, if not
     # add the repo and all the targets using the add_repo method
@@ -89,6 +90,7 @@ def fix_classpath(repo_name, eclipse_project_name, repo_dir, targets):
 def pants_build_eclipse(repo_name, eclipse_project_name, repo_dir, targets):
     """buid/rebuild the specified project and add it to eclipse"""
     if not check_eclim_running():
+        print_loud("RUN CMD pants_build_eclipse AGAIN")
         return
     targets_list = list(targets) if targets else []
     repo_cfg = fetch_or_create_cfg(repo_name, repo_dir, eclipse_project_name, targets_list)
@@ -117,6 +119,7 @@ def pants_build_eclipse(repo_name, eclipse_project_name, repo_dir, targets):
 def pants_clean_rebuild_eclipse(repo_name, eclipse_project_name, repo_dir, targets):
     """same as build eclipse, except delete the project from eclipse and reset pants"""
     if not check_eclim_running():
+        print_loud("RUN CMD pants_clean_rebuild_eclipse AGAIN")
         return
     repo_cfg = fetch_or_create_cfg(repo_name, repo_dir, eclipse_project_name, list(targets))
     if not repo_cfg:

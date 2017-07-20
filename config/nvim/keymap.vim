@@ -91,6 +91,12 @@ nnoremap Q @q
     noremap <leader>pmw :MaximizerToggle<CR>
   " }
 
+  " neosnippet {
+    let g:UltiSnipsExpandTrigger='<c-s>'
+    let g:UltiSnipsJumpForwardTrigger='<c-j>'
+    let g:UltiSnipsJumpBackwardTrigger='<c-k>'
+    let g:UltiSnipsListSnippets='<c-l>' 
+  " }
   " gen_tags {
     nnoremap <leader>ptc :GenCtags<CR>
     nnoremap <leader>ptg :GenGTAGS<CR>

@@ -49,6 +49,26 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'slim-template/vim-slim'
 " }
 
+" ============== file formatting ==============
+" Show the indent level
+" Indentline {
+  Plug 'Yggdroot/indentLine'
+  let g:indentLine_color_term = 239
+  let g:indentLine_color_gui = '#606775'
+  let g:indentLine_char = '.'
+" }
+" Java format {
+  Plug 'xuhdev/indent-java.vim'
+" }
+" Delete surrounding parens
+" surround {
+  Plug 'tpope/vim-surround' 
+" }
+" Pants build syntax
+" vim-pants {
+  Plug 'pantsbuild/vim-pants'
+" }
+
 " ============== file movement ==============
 " NerdTree {
   Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] } 
@@ -124,6 +144,29 @@ call plug#begin('~/.config/nvim/plugged')
 " vim-bundler {
   Plug 'tpope/vim-bundler', { 'for': ['ruby', 'eruby', 'haml', 'slim'] }
 " }
+" Snippets, this will do all sorts of nice things like auto test generation
+" ultisnips, main snippets engine
+" ultisnips {
+  Plug 'SirVer/ultisnips'
+  " Enable snipMate compatibility feature.
+  " Configuration for custom snips
+  let g:UltiSnipsSnippetsDir = "~/.config/nvim/snips"
+  let g:UltiSnipsSnippetDirectories = ["UltiSnips", "snips"]
+
+  "" Trigger configuration.
+
+  "" If you want :UltiSnipsEdit to split your window.
+  "let g:UltiSnipsEditSplit='vertical'
+
+  "" Use Python Version
+  "let g:UltiSnipsUsePythonVersion = 3
+
+  "let g:ultisnips_python_style="google"
+  " }
+  " Provides the actual snippet lib
+  " vim-snippets{
+  Plug 'honza/vim-snippets'
+  " }
 
 " ============== tags/search related ==============
 " all this does is create tags async
@@ -175,10 +218,6 @@ call plug#begin('~/.config/nvim/plugged')
 " }
 
 " ============== random ==============
-" Delete surrounding parens
-" surround {
-  Plug 'tpope/vim-surround' 
-" }
 " Easily move windows around using <leader>ww 
 " windowswap {
   Plug 'wesQ3/vim-windowswap'
@@ -187,10 +226,6 @@ call plug#begin('~/.config/nvim/plugged')
 " vim-maximizer {
   Plug 'szw/vim-maximizer'
 " }
-" Pants build syntax
-" vim-pants {
-  Plug 'pantsbuild/vim-pants'
-" }
 " Fixng copy paste shit
 " focus-events {
   Plug 'tmux-plugins/vim-tmux-focus-events'
@@ -198,6 +233,9 @@ call plug#begin('~/.config/nvim/plugged')
 " }
 " session management {
   Plug 'tpope/vim-obsession'
+" }
+" uniting all the stupidity {
+  Plug 'Shougo/denite.nvim'
 " }
 
 call plug#end()
