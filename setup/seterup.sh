@@ -1,6 +1,6 @@
 #!/bin/bash
 which -s brew
-if [[ $? != 0 ]] ; then
+if [[ $? != 0 ]]; then
     echo "Installing Homebrew"
     # Install Homebrew
     # https://github.com/mxcl/homebrew/wiki/installation
@@ -9,29 +9,53 @@ else
     echo "Homebrew Upating"
     brew update
 fi
+
 brew install macvim --with-override-system-vim
 echo "export DOTFILE_ROOT='$(pwd)'" >> ~/.bash_profile
-echo "source $HOME/.bash_local" >> ~/.bashrc
 export DOTFILE_ROOT=$(pwd)
 
 brew install the_silver_searcher
 brew install tmux
+brew install neovim
+brew install zsh
+brew install zsh-completions
+brew install reattach-to-user-namespace
+brew install python3
+brew install python
 brew install rlwrap
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-FILE='vimrc'
-if [ ! -f "$FILE" ]
-then
-  ln -sf $DOTFILE_ROOT/vimrc ~/.vimrc
-else
-  cat $DOTFILE_ROOT/vimrc > $HOME/.vimrc
-fi
+pip2 install neovim
+pip2 install powerline-status
+pip2 install jedi
+pip2 install meld3
+pip2 install powerline-status
+pip2 install setuptools
+pip2 install virtualenv
 
-if [ ! -f "$FILE" ]
-then
-ln -sf $DOTFILE_ROOT/bashrc ~/.bash_local
-else
-fi
+pip3 install jedi
+pip3 install neovim
+
+function link_rc_local() {
+  FILE=$1
+  [[ ! -f "$HOME/.${FILE}_local" ]] && ln -sf $DOTFILE_ROOT/${FILE} ~/.${FILE}_local
+  echo "source $HOME/.${FILE}_local" >> ~/.$FILE
+}
+
+function link_rc() {
+  FILE=$1
+  if [[  ! -f "$HOME/$FILE" ]]; then
+    ln -sf $DOTFILE_ROOT/$FILE ~/.$FILE
+  else
+    cat $DOTFILE_ROOT/$FILE > $HOME/.$FILE
+  fi
+}
+
+link_rc_local bashrc
+link_rc_local zshrc
 ln -sf $DOTFILE_ROOT/tmux.conf ~/.tmux.conf
 ln -sf $DOTFILE_ROOT/bin ~/tess_bin
 chmod -R +x ~/tess_bin

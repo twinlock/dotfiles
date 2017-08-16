@@ -13,7 +13,6 @@ fi
 #source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 #path=(/usr/local/share/zsh-completions $fpath)
 if [[ -d "$HOME/Library/Python/2.7/lib/python/site-packages/powerline/" ]]; then
-  echo "loading rvm"
   export POWERLINE_ROOT="$HOME/Library/Python/2.7/lib/python/site-packages/powerline/"
   powerline-daemon -q
   POWERLINE_BASH_CONTINUATION=1
