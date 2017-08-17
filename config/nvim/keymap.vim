@@ -128,6 +128,9 @@ nnoremap Q @q
     nnoremap <leader>jc :JavaCorrect<CR>
     nnoremap <leader>jdc :JavaDocComment<CR>
     nnoremap <leader>jch :JavaCallHierarchy<CR>
+    nnoremap <leader>juf :JUnitFindTest<CR>
+    nnoremap <leader>juft :JUnitFindTest<CR>
+    nnoremap <leader>jut :JUnitFindTest<CR>
     nnoremap <leader>jh :JavaHierarchy<CR>
     nnoremap <leader>ji :JavaImport<CR>
     nnoremap <leader>jf :JavaFormat<CR>

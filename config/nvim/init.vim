@@ -6,6 +6,7 @@ syntax on
 set visualbell
 set encoding=utf8
 set clipboard=unnamed
+set mouse=a
 
 " vim format stuff {
   set autoindent
