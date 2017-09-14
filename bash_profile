@@ -1,6 +1,3 @@
-export artifactory_username='twinlock'
-export artifactory_password='L8T2DQUpAM4kqumZ'
-
 # Setting for the new UTF-8 terminal support in Lion
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8

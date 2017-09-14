@@ -3,7 +3,8 @@
 # dscacheutil -q group
 STAFF_GROUP_ID=20
 USERNAME="pairprogger"
-PASSWORD="password123"
+echo "input a password for the user"
+read -sp 'Password: ' PASSWORD
 
 MAXID=$(dscl . -list /Users UniqueID | awk '{print $2}' | sort -ug | tail -1)
 NEWID=$((MAXID+1))
