@@ -1,23 +1,46 @@
+export ZPLUG_HOME=/usr/local/opt/zplug
+source $ZPLUG_HOME/init.zsh
+
+# plugins {
+  # Make sure to use double quotes
+  zplug "zplug/zplug", hook-build:"zplug --self-manage"
+  zplug "zsh-users/zsh-history-substring-search"
+  zplug "stedolan/jq"
+  zplug "b4b4r07/emoji-cli"
+  zplug "powerline/powerline"
+  zplug "powerline/powerline", use:"powerline/bindings/zsh/powerline.zsh"
+  # ^^ for some odd reason it didnt like this unless i removed the use command first
+  # zsh-syntax-highlighting must be loaded
+  # after executing compinit command and sourcing other plugins
+  # (If the defer tag is given 2 or above, run after compinit command)
+  zplug "zsh-users/zsh-syntax-highlighting", defer:2
+#}
+
 [[ -f "$HOME/.aliases" ]] && source "$HOME/.aliases"
 [[ -f "$HOME/.localaliases" ]] && source "$HOME/.localaliases"
 
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-if [[ -d "$HOME/.rvm" ]]; then
-  export PATH="$PATH:$HOME/.rvm/bin"
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-fi
+# configure ruby {
+  if [[ -d "$HOME/.rvm" ]]; then
+    export PATH="$PATH:$HOME/.rvm/bin"
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+  fi
+# }
 
-#source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
-#path=(/usr/local/share/zsh-completions $fpath)
-if [[ -d "$HOME/Library/Python/2.7/lib/python/site-packages/powerline/" ]]; then
-  export POWERLINE_ROOT="$HOME/Library/Python/2.7/lib/python/site-packages/powerline/"
+# configure python {
+  export PY_SITE_PACKAGE="$(python -m site --user-site)"
+  if which pyenv > /dev/null; then
+    eval "$(pyenv init -)";
+    export PYENV_ROOT="$(pyenv root)"
+  fi
+# }
+
+if [[ -d "$PY_SITE_PACKAGE/powerline/" ]]; then
+  export POWERLINE_ROOT="$PY_SITE_PACKAGE/powerline/"
   powerline-daemon -q
-  POWERLINE_BASH_CONTINUATION=1
-  POWERLINE_BASH_SELECT=1
-  . $POWERLINE_ROOT/bindings/zsh/powerline.zsh
 fi
 
 HISTSIZE=10000000
@@ -42,3 +65,4 @@ zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
 bindkey "^[[A" up-line-or-beginning-search # Up
 bindkey "^[[B" down-line-or-beginning-search # Down
+zplug load

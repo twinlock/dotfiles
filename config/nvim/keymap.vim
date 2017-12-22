@@ -125,6 +125,7 @@ nnoremap Q @q
   " eclim {
     inoremap <C-Space> <C-x><C-o>
     inoremap <C-@> <C-Space>
+    nnoremap <leader>jsc :JavaSearchContext<CR>
     nnoremap <leader>jc :JavaCorrect<CR>
     nnoremap <leader>jdc :JavaDocComment<CR>
     nnoremap <leader>jch :JavaCallHierarchy<CR>

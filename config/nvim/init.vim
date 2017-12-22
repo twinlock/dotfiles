@@ -1,6 +1,23 @@
 source ~/.config/nvim/plugins.vim
 source ~/.config/nvim/keymap.vim
 
+" use a virtualenv for python
+" python config {
+" Set pyenv root.
+  if empty($PYENV_ROOT)
+    let s:pyenv_root = $HOME . '/.pyenv'
+  else
+    let s:pyenv_root = $PYENV_ROOT
+  endif
+
+  if isdirectory(s:pyenv_root . '/versions/neovim2/')
+    let g:python_host_prog = $PYENV_ROOT.'/versions/neovim2/bin/python'
+  endif
+  if isdirectory(s:pyenv_root . '/versions/neovim3/')
+    let g:python3_host_prog = $PYENV_ROOT.'/versions/neovim3/bin/python'
+  endif
+" }
+
 filetype plugin indent on
 syntax on
 set visualbell
