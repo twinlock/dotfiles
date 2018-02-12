@@ -61,13 +61,28 @@ def fix_classpath(repo_name, eclipse_project_name, repo_dir, targets):
 
     # next fix the actual classpath entries which for some un-fucking-known reason decides to be
     # explicit about all included directories, and eclipse hanldes this really baddly
+    # and also for some other un-fucking-known reason adds duplicate entries
     classpath_tree = ElementTree.parse(classpath_filename)
     classpath_root = classpath_tree.getroot()
+    cp_lib_dicts = {}
     for cpe in classpath_root.findall("classpathentry"):
-        if src_re.match(cpe.attrib["path"]):
+        # put all entries in the map, keyed on path
+        cpe_path = cpe.attrib["path"]
+        if src_re.match(cpe_path):
             junk = cpe.attrib.pop("including", None)
-        elif cpe.attrib["path"] in cleaned_targets:
+        elif cpe_path in cleaned_targets:
             classpath_root.remove(cpe)
+        if "lib" == cpe.attrib["kind"]:
+            if cpe_path in cp_lib_dicts:
+                other_cpe = cp_lib_dicts[cpe_path]
+                if "sourcepath" in cpe.attrib:
+                    print("extra entry: %s", other_cpe.attrib)
+                    classpath_root.remove(other_cpe)
+                else:
+                    print("extra entry: %s", cpe.attrib)
+                    classpath_root.remove(cpe)
+            else:
+                cp_lib_dicts[cpe_path] = cpe
     classpath_tree.write(classpath_filename)
 
     # finally fix the UI preferences, remove the really odd automatic project settings like
