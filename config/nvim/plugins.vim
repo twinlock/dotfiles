@@ -15,7 +15,12 @@ if !filereadable(plugpath)
 endif
 
 " Initialize plugin system
-call plug#begin('~/.config/nvim/plugged')
+if has('nvim')
+  call plug#begin('~/.config/nvim/plugged')
+else
+  call plug#begin('~/.config/vim/plugged')
+endif
+
 " ============== COLOR ==============
 " colorschemes and handy dandy statusline things
 " Plug 'joshdick/onedark.vim'
@@ -29,7 +34,7 @@ call plug#begin('~/.config/nvim/plugged')
   let g:airline#extensions#tabline#show_buffers = 0
 " }
 
-" Gruvbox { 
+" Gruvbox {
   Plug 'morhetz/gruvbox'
   let g:gruvbox_contrast_dark="soft"
   if !has("gui_running")
@@ -39,7 +44,7 @@ call plug#begin('~/.config/nvim/plugged')
 
 " Color nested matching parentheses with different colors
 " Rainbowparens {
-  Plug 'luochen1990/rainbow'  
+  Plug 'luochen1990/rainbow'
   let g:rainbow_active = 1
 " }
 " devicons {
@@ -62,7 +67,7 @@ call plug#begin('~/.config/nvim/plugged')
 " }
 " Delete surrounding parens
 " surround {
-  Plug 'tpope/vim-surround' 
+  Plug 'tpope/vim-surround'
 " }
 " Pants build syntax
 " vim-pants {
@@ -71,8 +76,8 @@ call plug#begin('~/.config/nvim/plugged')
 
 " ============== file movement ==============
 " NerdTree {
-  Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] } 
-  Plug 'Xuyuanp/nerdtree-git-plugin' 
+  Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
+  Plug 'Xuyuanp/nerdtree-git-plugin'
   let g:NERDTreeDirArrows=0
   let g:NERDTreeShowBookmarks=1
   let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$', '^\.pants.d$']
@@ -109,8 +114,20 @@ call plug#begin('~/.config/nvim/plugged')
 " }
 
 " ============== autocompletion/ code building ==============
+" ijaas {
+" intellij as a service, testing if it works (thus the non standard location)
+  if !has('nvim')
+    Plug '~/workspace/ijaas/vim/'
+  endif
+" }
 " deoplete {
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  if has('nvim')
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  else
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
+  endif
   " Use deoplete.
   let g:deoplete#enable_at_startup = 1
 " }
@@ -118,22 +135,24 @@ call plug#begin('~/.config/nvim/plugged')
 " Eclim works, we just map it to ctrl space
 " Eclim {
   let g:EclimCompletionMethod = 'omnifunc'
-  "autocmd! BufWritePost,BufEnter * if  != "java" | Validate | endif
+  "autocmd! BufWritePost,BufEnter * if  != 'java' | Validate | endif
 " }
 " javacomplete2 {
   " Plug 'artur-shaik/vim-javacomplete2'
   "autocmd FileType java setlocal omnifunc=javacomplete#Complete
 " }
 " Neomake {
-  Plug 'neomake/neomake'
-  autocmd! BufWritePost *.rb :Neomake
+  if has('nvim')
+    Plug 'neomake/neomake'
+    autocmd! BufWritePost *.rb :Neomake
+  endif
 " }
 " Python:
 " Jedi {
   Plug 'zchee/deoplete-jedi'
 " }
 " Ruby:
-" vim-ruby { 
+" vim-ruby {
   Plug 'vim-ruby/vim-ruby'
 " }
 " Rails support (:A, :R, :Rmigration, :Rextract)
@@ -193,13 +212,23 @@ call plug#begin('~/.config/nvim/plugged')
 " similar to sublime's find replace:
 " esearch {
   Plug 'eugen0329/vim-esearch'
-  let g:esearch = {
-        \ 'adapter':    'ag',
-        \ 'backend':    'nvim',
-        \ 'out':        'win',
-        \ 'batch_size': 1000,
-        \ 'use':        ['visual', 'hlsearch', 'last'],
-        \}
+  if has('nvim')
+    let g:esearch = {
+          \ 'adapter':    'ag',
+          \ 'backend':    'nvim',
+          \ 'out':        'win',
+          \ 'batch_size': 1000,
+          \ 'use':        ['visual', 'hlsearch', 'last'],
+          \}
+  else
+    let g:esearch = {
+          \ 'adapter':    'ag',
+          \ 'backend':    'vim8',
+          \ 'out':        'win',
+          \ 'batch_size': 1000,
+          \ 'use':        ['visual', 'hlsearch', 'last'],
+          \}
+  endif
 " }
 " Use * on visually selected text to search for it
 " visual star search {
@@ -218,7 +247,7 @@ call plug#begin('~/.config/nvim/plugged')
 " }
 
 " ============== random ==============
-" Easily move windows around using <leader>ww 
+" Easily move windows around using <leader>ww
 " windowswap {
   Plug 'wesQ3/vim-windowswap'
 " }
@@ -235,7 +264,9 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'tpope/vim-obsession'
 " }
 " uniting all the stupidity {
-  Plug 'Shougo/denite.nvim'
+  if has('nvim')
+    Plug 'Shougo/denite.nvim'
+  endif
 " }
 
 call plug#end()

@@ -99,6 +99,29 @@ def fix_classpath(repo_name, eclipse_project_name, repo_dir, targets):
 
 @cli.command()
 @click.option("--repo_name", help="name of the repository, doesnt need to match anything")
+@click.option("--idea_project_name", help="name of the eclipse project")
+@click.option("--repo_dir", help="directory where the repo is stored")
+@click.argument("targets", nargs=-1)
+def pants_build_idea(repo_name, idea_project_name, repo_dir, targets):
+    """buid/rebuild the specified project and add it to eclipse"""
+    targets_list = list(targets) if targets else []
+    repo_cfg = fetch_or_create_cfg(repo_name, repo_dir, idea_project_name, targets_list)
+    if not repo_cfg:
+        return
+    repo_dir = repo_cfg["location"]
+    idea_project_name = repo_cfg["eclipse_project_name"]
+    cleaned_targets = [proj.strip() for proj in targets_list or repo_cfg["targets"]]
+    merged_targets = repo_cfg["targets"] \
+            + [tgt for tgt in cleaned_targets if tgt not in repo_cfg["targets"]]
+    print("compiling all pants targets %s" % cleaned_targets)
+    subprocess.run(["pants","compile"] + [proj + "::" for proj in cleaned_targets], check=True)
+    print("creating eclipse project from targets %s" % merged_targets)
+    subprocess.run(["pants","idea","--idea-project-name=" + idea_project_name]
+            + [proj + "::" for proj in merged_targets], check=True)
+    print_loud("Project Created")
+
+@cli.command()
+@click.option("--repo_name", help="name of the repository, doesnt need to match anything")
 @click.option("--eclipse_project_name", help="name of the eclipse project")
 @click.option("--repo_dir", help="directory where the repo is stored")
 @click.argument("targets", nargs=-1)

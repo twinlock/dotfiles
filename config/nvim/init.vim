@@ -10,11 +10,13 @@ source ~/.config/nvim/keymap.vim
     let s:pyenv_root = $PYENV_ROOT
   endif
 
-  if isdirectory(s:pyenv_root . '/versions/neovim2/')
-    let g:python_host_prog = $PYENV_ROOT.'/versions/neovim2/bin/python'
-  endif
-  if isdirectory(s:pyenv_root . '/versions/neovim3/')
-    let g:python3_host_prog = $PYENV_ROOT.'/versions/neovim3/bin/python'
+  if has('nvim')
+    if isdirectory(s:pyenv_root . '/versions/neovim2/')
+      let g:python_host_prog = $PYENV_ROOT.'/versions/neovim2/bin/python'
+    endif
+    if isdirectory(s:pyenv_root . '/versions/neovim3/')
+      let g:python3_host_prog = $PYENV_ROOT.'/versions/neovim3/bin/python'
+    endif
   endif
 " }
 
@@ -52,7 +54,12 @@ set mouse=a
 
 " color scheme {
   colorscheme gruvbox
-  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  if has('nvim')
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  else
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  endif
   set termguicolors
   highlight LineNr ctermfg=darkred
   highlight ColorColumn ctermbg=darkgrey

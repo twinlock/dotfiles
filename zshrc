@@ -5,8 +5,6 @@ source $ZPLUG_HOME/init.zsh
   # Make sure to use double quotes
   zplug "zplug/zplug", hook-build:"zplug --self-manage"
   zplug "zsh-users/zsh-history-substring-search"
-  zplug "stedolan/jq"
-  zplug "b4b4r07/emoji-cli"
   zplug "powerline/powerline"
   zplug "powerline/powerline", use:"powerline/bindings/zsh/powerline.zsh"
   # ^^ for some odd reason it didnt like this unless i removed the use command first
@@ -40,6 +38,7 @@ source $ZPLUG_HOME/init.zsh
 
 if [[ -d "$PY_SITE_PACKAGE/powerline/" ]]; then
   export POWERLINE_ROOT="$PY_SITE_PACKAGE/powerline/"
+  echo "starting powerline daemon"
   powerline-daemon -q
 fi
 
@@ -66,3 +65,9 @@ zle -N down-line-or-beginning-search
 bindkey "^[[A" up-line-or-beginning-search # Up
 bindkey "^[[B" down-line-or-beginning-search # Down
 zplug load
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/tess/Downloads/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/tess/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/tess/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/tess/Downloads/google-cloud-sdk/completion.zsh.inc'; fi

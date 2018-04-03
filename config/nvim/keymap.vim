@@ -32,7 +32,9 @@ let mapleader = " "
   nnoremap <silent> <Leader>l :wincmd l<CR>
 " }
 " terminal {
-  tnoremap <Esc> <C-\><C-n>
+  if has('nvim')
+    tnoremap <Esc> <C-\><C-n>
+  endif
 " }
 
 " BASIC VIM FUCNTIONS {
@@ -91,7 +93,7 @@ nnoremap Q @q
     noremap <leader>pmw :MaximizerToggle<CR>
   " }
 
-  " neosnippet {
+  " Ultisnippet {
     let g:UltiSnipsExpandTrigger='<c-s>'
     let g:UltiSnipsJumpForwardTrigger='<c-j>'
     let g:UltiSnipsJumpBackwardTrigger='<c-k>'
