@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/usr/bin/env python3
 """This script helps shove java up into vim (its as uncomfortable as it sounds)"""
 from xml.etree import ElementTree
 import subprocess
@@ -108,7 +108,6 @@ def pants_build_idea(repo_name, idea_project_name, repo_dir, targets):
     repo_cfg = fetch_or_create_cfg(repo_name, repo_dir, idea_project_name, targets_list)
     if not repo_cfg:
         return
-    repo_dir = repo_cfg["location"]
     idea_project_name = repo_cfg["eclipse_project_name"]
     cleaned_targets = [proj.strip() for proj in targets_list or repo_cfg["targets"]]
     merged_targets = repo_cfg["targets"] \

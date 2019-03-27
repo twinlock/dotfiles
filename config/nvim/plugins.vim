@@ -73,6 +73,10 @@ endif
 " vim-pants {
   Plug 'pantsbuild/vim-pants'
 " }
+" Signal fx syntax
+" signalflow {
+  Plug 'signalfx/signalflow.vim'
+" }
 
 " ============== file movement ==============
 " NerdTree {
@@ -117,8 +121,15 @@ endif
 " ijaas {
 " intellij as a service, testing if it works (thus the non standard location)
   if !has('nvim')
-    Plug '~/workspace/ijaas/vim/'
+  "  Plug '~/workspace/ijaas/vim/'
   endif
+" }
+" LanguageClient-neovim {
+" a language client, which should interact in a language agnostic way to language servers
+  Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
 " }
 " deoplete {
   if has('nvim')
@@ -134,7 +145,12 @@ endif
 " Java:
 " Eclim works, we just map it to ctrl space
 " Eclim {
-  let g:EclimCompletionMethod = 'omnifunc'
+  if has('nvim')
+    if isdirectory($HOME.'/.config/nvim/plugged/eclim')
+      Plug '~/.config/nvim/plugged/eclim'
+      let g:EclimCompletionMethod = 'omnifunc'
+    endif
+  endif
   "autocmd! BufWritePost,BufEnter * if  != 'java' | Validate | endif
 " }
 " javacomplete2 {
@@ -144,12 +160,27 @@ endif
 " Neomake {
   if has('nvim')
     Plug 'neomake/neomake'
+    " stupid way to disable java check
+    let g:loaded_neomake_java_javac_maker = 1
     autocmd! BufWritePost *.rb :Neomake
+    autocmd! BufWritePost *.py :Neomake
   endif
 " }
 " Python:
 " Jedi {
+  Plug 'davidhalter/jedi'
+" }
+" Pyclient {
+  Plug 'neovim/python-client'
+" }
+" Deoplete Jedi {
   Plug 'zchee/deoplete-jedi'
+" }
+" vim pyenv {
+  Plug 'lambdalisue/vim-pyenv'
+" }
+" vim pydocstring {
+  Plug 'heavenshell/vim-pydocstring'
 " }
 " Ruby:
 " vim-ruby {
@@ -178,9 +209,9 @@ endif
   "let g:UltiSnipsEditSplit='vertical'
 
   "" Use Python Version
-  "let g:UltiSnipsUsePythonVersion = 3
+  let g:UltiSnipsUsePythonVersion = 3
 
-  "let g:ultisnips_python_style="google"
+  let g:ultisnips_python_style="google"
   " }
   " Provides the actual snippet lib
   " vim-snippets{
@@ -270,3 +301,10 @@ endif
 " }
 
 call plug#end()
+
+" Required for operations modifying multiple buffers like rename.
+set hidden
+
+let g:LanguageClient_serverCommands = {
+    \ 'java': ['tcp://localhost:2089'],
+    \ }

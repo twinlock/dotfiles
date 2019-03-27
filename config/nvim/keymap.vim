@@ -52,6 +52,9 @@ let mapleader = " "
   nnoremap <leader>gw :se tw=99<CR>
   " clean out trialing whitespace
   nnoremap <leader>gc :%s/\s\+$//g<CR>
+
+  nnoremap <leader>qf :copen<CR>
+  nnoremap <leader>qfc :cclose<CR>
 " }
 
 
@@ -92,12 +95,15 @@ nnoremap Q @q
   " vim-maximizer {
     noremap <leader>pmw :MaximizerToggle<CR>
   " }
+  " pydocstring {
+    nmap <silent> <leader>ppyds <Plug>(pydocstring)
+  " }
 
   " Ultisnippet {
     let g:UltiSnipsExpandTrigger='<c-s>'
     let g:UltiSnipsJumpForwardTrigger='<c-j>'
     let g:UltiSnipsJumpBackwardTrigger='<c-k>'
-    let g:UltiSnipsListSnippets='<c-l>' 
+    let g:UltiSnipsListSnippets='<c-l>'
   " }
   " gen_tags {
     nnoremap <leader>ptc :GenCtags<CR>
@@ -125,8 +131,15 @@ nnoremap Q @q
   " }
 
   " eclim {
-    inoremap <C-Space> <C-x><C-o>
-    inoremap <C-@> <C-Space>
+    if has('nvim')
+      inoremap <C-Space> <C-x><C-o>
+      inoremap <C-@> <C-Space>
+    else
+      imap <C-Space> <C-x><C-o>
+      imap <C-@> <C-Space>
+    endif
+    " Required for operations modifying multiple buffers like rename.
+    set hidden
     nnoremap <leader>jsc :JavaSearchContext<CR>
     nnoremap <leader>jc :JavaCorrect<CR>
     nnoremap <leader>jdc :JavaDocComment<CR>

@@ -1,7 +1,4 @@
-source ~/.config/nvim/plugins.vim
-source ~/.config/nvim/keymap.vim
 
-" use a virtualenv for python
 " python config {
 " Set pyenv root.
   if empty($PYENV_ROOT)
@@ -10,13 +7,36 @@ source ~/.config/nvim/keymap.vim
     let s:pyenv_root = $PYENV_ROOT
   endif
 
+  if isdirectory(s:pyenv_root)
+    " Add pyenv shims to path.
+    let s:pyenv_shims = s:pyenv_root . '/shims/'
+    let $PATH = substitute($PATH, ':' . s:pyenv_shims, '', '')
+    let $PATH .= ':' . s:pyenv_shims
+  endif
+" }
+source ~/.config/nvim/plugins.vim
+source ~/.config/nvim/keymap.vim
+
+" more python config {
+" use a virtualenv for python
   if has('nvim')
+    " When reading a buffer (after 1s), and when writing (no delay).
+    call neomake#configure#automake('rw', 1000)
+
     if isdirectory(s:pyenv_root . '/versions/neovim2/')
       let g:python_host_prog = $PYENV_ROOT.'/versions/neovim2/bin/python'
     endif
     if isdirectory(s:pyenv_root . '/versions/neovim3/')
       let g:python3_host_prog = $PYENV_ROOT.'/versions/neovim3/bin/python'
     endif
+    " Bonus example to set deoplete-jedi path from vim-pyenv.
+    augroup pyenv-deoplete-jedi-path
+      autocmd!
+      autocmd User vim-pyenv-activate-post
+            \ let g:deoplete#sources#jedi#python_path = g:pyenv#python_exec
+      autocmd User vim-pyenv-deactivate-post
+            \ unlet g:deoplete#sources#jedi#python_path
+    augroup END
   endif
 " }
 
