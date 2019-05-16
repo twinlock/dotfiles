@@ -29,7 +29,7 @@ source $ZPLUG_HOME/init.zsh
 # }
 
 # configure python {
-  export PY_SITE_PACKAGE="$(python -m site --user-site)"
+  export PY_SITE_PACKAGE="$(/usr/local/bin/python3 -m site | grep /usr/local/lib | sed -e "s/^ *\'\(.*\)\',/\1/")"
   if which pyenv > /dev/null; then
     eval "$(pyenv init -)";
     export PYENV_ROOT="$(pyenv root)"
