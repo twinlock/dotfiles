@@ -81,7 +81,9 @@ endif
 " ============== file movement ==============
 " NerdTree {
   Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
-  Plug 'Xuyuanp/nerdtree-git-plugin'
+  " While the git plugin is nice, ive had all sorts of performance problems with it, not sure what
+  " to do other than to just remove it, sadly.
+  " Plug 'Xuyuanp/nerdtree-git-plugin'
   let g:NERDTreeDirArrows=0
   let g:NERDTreeShowBookmarks=1
   let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$', '^\.pants.d$']
@@ -124,16 +126,10 @@ endif
   "  Plug '~/workspace/ijaas/vim/'
   endif
 " }
-" LanguageClient-neovim {
-" a language client, which should interact in a language agnostic way to language servers
-  Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-" }
 " deoplete {
   if has('nvim')
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'beeender/Comrade'
   else
     Plug 'Shougo/deoplete.nvim'
     Plug 'roxma/nvim-yarp'
@@ -195,27 +191,28 @@ endif
   Plug 'tpope/vim-bundler', { 'for': ['ruby', 'eruby', 'haml', 'slim'] }
 " }
 " Snippets, this will do all sorts of nice things like auto test generation
+" #### Turning this off for now as i got comrade intellij working ####
 " ultisnips, main snippets engine
 " ultisnips {
-  Plug 'SirVer/ultisnips'
-  " Enable snipMate compatibility feature.
-  " Configuration for custom snips
-  let g:UltiSnipsSnippetsDir = "~/.config/nvim/snips"
-  let g:UltiSnipsSnippetDirectories = ["UltiSnips", "snips"]
-
-  "" Trigger configuration.
-
-  "" If you want :UltiSnipsEdit to split your window.
-  "let g:UltiSnipsEditSplit='vertical'
-
-  "" Use Python Version
-  let g:UltiSnipsUsePythonVersion = 3
-
-  let g:ultisnips_python_style="google"
-  " }
-  " Provides the actual snippet lib
-  " vim-snippets{
-  Plug 'honza/vim-snippets'
+"  Plug 'SirVer/ultisnips'
+"  " Enable snipMate compatibility feature.
+"  " Configuration for custom snips
+"  let g:UltiSnipsSnippetsDir = "~/.config/nvim/snips"
+"  let g:UltiSnipsSnippetDirectories = ["UltiSnips", "snips"]
+"
+"  "" Trigger configuration.
+"
+"  "" If you want :UltiSnipsEdit to split your window.
+"  "let g:UltiSnipsEditSplit='vertical'
+"
+"  "" Use Python Version
+"  let g:UltiSnipsUsePythonVersion = 3
+"
+"  let g:ultisnips_python_style="google"
+"  " }
+"  " Provides the actual snippet lib
+"  " vim-snippets{
+"  Plug 'honza/vim-snippets'
   " }
 
 " ============== tags/search related ==============
@@ -304,7 +301,3 @@ call plug#end()
 
 " Required for operations modifying multiple buffers like rename.
 set hidden
-
-let g:LanguageClient_serverCommands = {
-    \ 'java': ['tcp://localhost:2089'],
-    \ }
