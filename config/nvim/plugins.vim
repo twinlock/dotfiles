@@ -62,6 +62,9 @@ endif
   let g:indentLine_color_gui = '#606775'
   let g:indentLine_char = '.'
 " }
+" Kotlin {
+  Plug 'udalov/kotlin-vim'
+" }
 " Java format {
   Plug 'xuhdev/indent-java.vim'
 " }
@@ -139,22 +142,8 @@ endif
   let g:deoplete#enable_at_startup = 1
 " }
 " Java:
-" Eclim works, we just map it to ctrl space
-" Eclim {
-  if has('nvim')
-    if isdirectory($HOME.'/.config/nvim/plugged/eclim')
-      Plug '~/.config/nvim/plugged/eclim'
-      let g:EclimCompletionMethod = 'omnifunc'
-    endif
-  endif
-  "autocmd! BufWritePost,BufEnter * if  != 'java' | Validate | endif
-" }
-" javacomplete2 {
-  " Plug 'artur-shaik/vim-javacomplete2'
-  "autocmd FileType java setlocal omnifunc=javacomplete#Complete
-" }
 " Neomake {
-  if has('nvim')
+  if !exists('g:vscode') && has('nvim')
     Plug 'neomake/neomake'
     " stupid way to disable java check
     let g:loaded_neomake_java_javac_maker = 1
@@ -190,30 +179,12 @@ endif
 " vim-bundler {
   Plug 'tpope/vim-bundler', { 'for': ['ruby', 'eruby', 'haml', 'slim'] }
 " }
-" Snippets, this will do all sorts of nice things like auto test generation
-" #### Turning this off for now as i got comrade intellij working ####
-" ultisnips, main snippets engine
-" ultisnips {
-"  Plug 'SirVer/ultisnips'
-"  " Enable snipMate compatibility feature.
-"  " Configuration for custom snips
-"  let g:UltiSnipsSnippetsDir = "~/.config/nvim/snips"
-"  let g:UltiSnipsSnippetDirectories = ["UltiSnips", "snips"]
-"
-"  "" Trigger configuration.
-"
-"  "" If you want :UltiSnipsEdit to split your window.
-"  "let g:UltiSnipsEditSplit='vertical'
-"
-"  "" Use Python Version
-"  let g:UltiSnipsUsePythonVersion = 3
-"
-"  let g:ultisnips_python_style="google"
-"  " }
-"  " Provides the actual snippet lib
-"  " vim-snippets{
-"  Plug 'honza/vim-snippets'
-  " }
+" Terraform support
+" {
+  Plug 'hashivim/vim-terraform'
+  Plug 'vim-syntastic/syntastic'
+  Plug 'juliosueiras/vim-terraform-completion'
+" }
 
 " ============== tags/search related ==============
 " all this does is create tags async
@@ -293,7 +264,7 @@ endif
 " }
 " uniting all the stupidity {
   if has('nvim')
-    Plug 'Shougo/denite.nvim'
+    Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
   endif
 " }
 

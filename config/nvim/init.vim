@@ -1,17 +1,19 @@
 
 " python config {
 " Set pyenv root.
-  if empty($PYENV_ROOT)
-    let s:pyenv_root = $HOME . '/.pyenv'
-  else
-    let s:pyenv_root = $PYENV_ROOT
-  endif
+  if has('nvim')
+    if empty($PYENV_ROOT)
+      let s:pyenv_root = $HOME . '/.pyenv'
+    else
+      let s:pyenv_root = $PYENV_ROOT
+    endif
 
-  if isdirectory(s:pyenv_root)
-    " Add pyenv shims to path.
-    let s:pyenv_shims = s:pyenv_root . '/shims/'
-    let $PATH = substitute($PATH, ':' . s:pyenv_shims, '', '')
-    let $PATH .= ':' . s:pyenv_shims
+    if isdirectory(s:pyenv_root)
+      " Add pyenv shims to path.
+      let s:pyenv_shims = s:pyenv_root . '/shims/'
+      let $PATH = substitute($PATH, ':' . s:pyenv_shims, '', '')
+      let $PATH .= ':' . s:pyenv_shims
+    endif
   endif
 " }
 source ~/.config/nvim/plugins.vim
@@ -100,4 +102,34 @@ set mouse=a
       autocmd! ColorScheme * hi CursorLineNR cterm=bold
   augroup END
 " }
+" Syntastic config
+" {
+  set statusline+=%#warningmsg#
+  set statusline+=%{SyntasticStatuslineFlag()}
+  set statusline+=%*
 
+  let g:syntastic_always_populate_loc_list = 1
+  let g:syntastic_auto_loc_list = 1
+  let g:syntastic_check_on_open = 1
+  let g:syntastic_check_on_wq = 0
+" }
+" Terraform config
+" {
+"  let g:deoplete#omni_patterns = {}
+"
+"  call deoplete#custom#option('omni_patterns', {
+"  \ 'complete_method': 'omnifunc',
+"  \ 'terraform': '[^ *\t"{=$]\w*',
+"  \})
+"
+"  call deoplete#initialize()
+"
+"  " (Optional) Enable terraform plan to be include in filter
+"  let g:syntastic_terraform_tffilter_plan = 1
+"
+"  " (Optional) Default: 0, enable(1)/disable(0) plugin's keymapping
+"  let g:terraform_completion_keys = 1
+"
+"  " (Optional) Default: 1, enable(1)/disable(0) terraform module registry completion
+"  let g:terraform_registry_module_completion = 0 
+" }

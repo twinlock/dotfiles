@@ -1,3 +1,4 @@
+# /bin/zsh
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
@@ -6,11 +7,12 @@ alias vim='nvim'
 alias kanyefidence="curl -s http://usatoday30.usatoday.com/exp/kanye/js/kanye.js | head -n 27 | sed -n 's|\[\"\(.*\)\",.*,|\1|p' | shuf | head -n 1"
 alias gimme-some-kanyefidence="kanyefidence"
 alias tmux="~/tess_bin/tmux_common.sh twinlock"
-alias start_eclim="/Users/tesswinlock/eclipse/java-mars/Eclipse.app/Contents/Eclipse/eclimd -Xmx2048M 2>/dev/null &>/dev/null &"
-alias eclim="start_eclim"
 alias cddev="cd ~/Development/"
 alias cdd="cd ~/Development/"
 alias rsync="rsync -P"
+alias cdp="cd ~/Development/polyrepo"
+alias pro="polyrepo"
+alias ios='sudo xcode-select -s /Applications/Xcode\ 11.2.1.app && java8'
 
 export VISUAL=nvim
 export VISUAL=vim

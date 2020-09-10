@@ -63,3 +63,6 @@ alias ll="ls -al"
 alias tmux="~/tess_bin/tmux_common.sh twinlock"
 alias start_eclim="/Users/tesswinlock/eclipse/java-mars/Eclipse.app/Contents/Eclipse/eclimd -Xmx2048M 2>/dev/null &>/dev/null &"
 alias eclim="start_eclim"
+if [[ -d "$PYENV_ROOT/versions/gcloud" ]]; then
+  export CLOUDSDK_PYTHON="$PYENV_ROOT/versions/gcloud/bin/python"
+fi

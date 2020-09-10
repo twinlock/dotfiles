@@ -22,6 +22,10 @@ let mapleader = " "
   nnoremap <leader>wm :vertical resize 60 <CR>
   nnoremap <leader>ws :vertical resize 20 <CR>
 
+  nnoremap <leader>wvl :vertical resize 107 <CR>
+  nnoremap <leader>wvm :vertical resize 60 <CR>
+  nnoremap <leader>wvs :vertical resize 20 <CR>
+
   nnoremap <leader>whl :resize 100 <CR>
   nnoremap <leader>whm :resize 45 <CR>
   nnoremap <leader>whs :resize 20 <CR>
@@ -80,17 +84,21 @@ nnoremap Q @q
   " }
 
   " incsearch {
-    map /  <Plug>(incsearch-forward)
-    map ?  <Plug>(incsearch-backward)
-    map g/ <Plug>(incsearch-stay)
-    map n  <Plug>(incsearch-nohl-n)
-    map N  <Plug>(incsearch-nohl-N)
+    if has('nvim')
+      map /  <Plug>(incsearch-forward)
+      map ?  <Plug>(incsearch-backward)
+      map g/ <Plug>(incsearch-stay)
+      map n  <Plug>(incsearch-nohl-n)
+      map N  <Plug>(incsearch-nohl-N)
+    endif
   " }
   " esearch {
-    " Start esearch prompt autofilled with one of g:esearch.use initial patterns
-    call esearch#map('<leader>pff', 'esearch')
-    " Start esearch autofilled with a word under the cursor
-    call esearch#map('<leader>pfw', 'esearch-word-under-cursor')
+    if has('nvim')
+      " Start esearch prompt autofilled with one of g:esearch.use initial patterns
+      call esearch#map('<leader>pff', 'esearch')
+      " Start esearch autofilled with a word under the cursor
+      call esearch#map('<leader>pfw', 'esearch-word-under-cursor')
+    endif
   " }
   " vim-maximizer {
     noremap <leader>pmw :MaximizerToggle<CR>
@@ -99,12 +107,6 @@ nnoremap Q @q
     nmap <silent> <leader>ppyds <Plug>(pydocstring)
   " }
 
-  " Ultisnippet {
-    let g:UltiSnipsExpandTrigger='<c-s>'
-    let g:UltiSnipsJumpForwardTrigger='<c-j>'
-    let g:UltiSnipsJumpBackwardTrigger='<c-k>'
-    let g:UltiSnipsListSnippets='<c-l>'
-  " }
   " gen_tags {
     nnoremap <leader>ptc :GenCtags<CR>
     nnoremap <leader>ptg :GenGTAGS<CR>
@@ -130,30 +132,23 @@ nnoremap Q @q
     autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
   " }
 
-  " eclim {
-    if has('nvim')
-      inoremap <C-Space> <C-x><C-o>
-      inoremap <C-@> <C-Space>
-    else
-      imap <C-Space> <C-x><C-o>
-      imap <C-@> <C-Space>
-    endif
     " Required for operations modifying multiple buffers like rename.
     set hidden
-    nnoremap <leader>jsc :JavaSearchContext<CR>
-    nnoremap <leader>jc :JavaCorrect<CR>
-    nnoremap <leader>jdc :JavaDocComment<CR>
-    nnoremap <leader>jch :JavaCallHierarchy<CR>
-    nnoremap <leader>juf :JUnitFindTest<CR>
-    nnoremap <leader>juft :JUnitFindTest<CR>
-    nnoremap <leader>jut :JUnitFindTest<CR>
-    nnoremap <leader>jh :JavaHierarchy<CR>
-    nnoremap <leader>ji :JavaImport<CR>
-    nnoremap <leader>jf :JavaFormat<CR>
-    nnoremap <leader>jv :Validate<CR>
-    nnoremap <leader>si :ScalaImport<CR>
-    nnoremap <leader>sji :JavaImportOrganize<CR>
-    nnoremap <leader>ssi :SortScalaImports<CR>
+  " { eclim
+  "  nnoremap <leader>jsc :JavaSearchContext<CR>
+  "  nnoremap <leader>jc :JavaCorrect<CR>
+  "  nnoremap <leader>jdc :JavaDocComment<CR>
+  "  nnoremap <leader>jch :JavaCallHierarchy<CR>
+  "  nnoremap <leader>juf :JUnitFindTest<CR>
+  "  nnoremap <leader>juft :JUnitFindTest<CR>
+  "  nnoremap <leader>jut :JUnitFindTest<CR>
+  "  nnoremap <leader>jh :JavaHierarchy<CR>
+  "  nnoremap <leader>ji :JavaImport<CR>
+  "  nnoremap <leader>jf :JavaFormat<CR>
+  "  nnoremap <leader>jv :Validate<CR>
+  "  nnoremap <leader>si :ScalaImport<CR>
+  "  nnoremap <leader>sji :JavaImportOrganize<CR>
+  "  nnoremap <leader>ssi :SortScalaImports<CR>
   " }
   " git_gutter {
     nnoremap <leader>pggt :GitGutterToggle<CR>
