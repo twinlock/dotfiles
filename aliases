@@ -13,6 +13,22 @@ alias rsync="rsync -P"
 alias cdp="cd ~/Development/polyrepo"
 alias pro="polyrepo"
 alias ios='sudo xcode-select -s /Applications/Xcode\ 11.2.1.app && java8'
+function sqm-app ()
+{
+  export POLYREPO=/Users/tess/Development/polyrepo
+  export SQM_SERVICE=$1
+  export DATABASE_CLUSTER=${SQM_SERVICE}-001
+  export DATABASE_NAME=${SQM_SERVICE:gs/-/_/}
+}
+alias sqmapp='sqm-app'
+function sqm-env ()
+{
+  export POLYREPO=/Users/tess/Development/polyrepo
+  export SQM_ENV=$1
+}
+alias sqmenv='sqm-env'
+alias sqmdb='sqm database connect -c "$DATABASE_CLUSTER" -n "$SQM_SERVICE" -d "$DATABASE_NAME"'
+alias sqmdbrw='sqm database connect -c "$DATABASE_CLUSTER" --role=db_read_write --writer -n "$SQM_SERVICE" -d "$DATABASE_NAME"'
 
 export VISUAL=nvim
 export VISUAL=vim
