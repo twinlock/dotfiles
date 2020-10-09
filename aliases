@@ -10,7 +10,16 @@ alias tmux="~/tess_bin/tmux_common.sh twinlock"
 alias cddev="cd ~/Development/"
 alias cdd="cd ~/Development/"
 alias rsync="rsync -P"
-alias cdp="cd ~/Development/polyrepo"
+function cd-polyrepo ()
+{
+  export POLYREPO=/Users/tess/Development/polyrepo
+  cd $POLYREPO
+  if [ ! -z "$1" ]
+  then
+    cd $1
+  fi
+}
+alias cdp="cd-polyrepo"
 alias pro="polyrepo"
 alias ios='sudo xcode-select -s /Applications/Xcode\ 11.2.1.app && java8'
 function sqm-app ()
@@ -33,3 +42,8 @@ alias sqmdbrw='sqm database connect -c "$DATABASE_CLUSTER" --role=db_read_write 
 export VISUAL=nvim
 export VISUAL=vim
 export EDITOR="$VISUAL"
+function restart-bluetooth(){
+  sudo kextunload -b com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport
+  sudo kextload -b com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport
+}
+alias restartbluetooth='restart-blutooth'
