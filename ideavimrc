@@ -1,0 +1,16 @@
+source ~/.config/nvim/init.vim
+" because somethings are broken otherwise
+nnoremap : ;
+nnoremap ; :
+vnoremap ; :
+vnoremap : ;
+nnoremap / /
+nnoremap ? ?
+nnoremap g/ g/
+nnoremap n n
+nnoremap N N
+vnoremap / /
+vnoremap ? ?
+vnoremap g/ g/
+vnoremap n n
+vnoremap N N
