@@ -63,6 +63,8 @@ function link_rc() {
 
 link_rc_local bashrc
 link_rc_local zshrc
+link_rc ideavimrc
+link_rc vimrc
 mkdir -p $HOME/.config/nvim/
 ln -sf $DOTFILE_ROOT/config/nvim/* $HOME/.config/nvim
 ln -sf $DOTFILE_ROOT/config/powerline $HOME/.config/powerline
