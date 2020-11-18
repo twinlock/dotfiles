@@ -8,8 +8,17 @@ alias vimdiff='nvim'
 alias kanyefidence="curl -s http://usatoday30.usatoday.com/exp/kanye/js/kanye.js | head -n 27 | sed -n 's|\[\"\(.*\)\",.*,|\1|p' | shuf | head -n 1"
 alias gimme-some-kanyefidence="kanyefidence"
 alias tmux="~/tess_bin/tmux_common.sh twinlock"
-alias cddev="cd ~/Development/"
-alias cdd="cd ~/Development/"
+alias cddev="cd-development"
+alias cdd="cd-development"
+function cd-development ()
+{
+  export DEVELOPMENT=/Users/tess/Development
+  cd $DEVELOPMENT
+  if [ ! -z "$1" ]
+  then
+    cd $1
+  fi
+}
 alias rsync="rsync -P"
 alias ios='sudo xcode-select -s /Applications/Xcode\ 11.2.1.app && java8'
 function cd-polyrepo ()

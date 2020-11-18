@@ -91,6 +91,11 @@ endif
   let g:NERDTreeShowBookmarks=1
   let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$', '^\.pants.d$']
 " }
+" Ranger {
+  Plug 'rbgrouleff/bclose.vim'
+  Plug 'francoiscabrol/ranger.vim'
+  let g:ranger_command_override = g:python3_host_dir . '/ranger'
+" }
 
 " ctrlp {
   Plug 'ctrlpvim/ctrlp.vim'

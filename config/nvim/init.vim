@@ -31,8 +31,6 @@
     endif
   endif
 " }
-source ~/.config/nvim/plugins.vim
-source ~/.config/nvim/keymap.vim
 
 " more python config {
 " use a virtualenv for python
@@ -42,9 +40,11 @@ source ~/.config/nvim/keymap.vim
 
     if isdirectory(s:pyenv_root . '/versions/neovim2/')
       let g:python_host_prog = $PYENV_ROOT.'/versions/neovim2/bin/python'
+      let g:python_host_dir = $PYENV_ROOT.'/versions/neovim2/bin/'
     endif
     if isdirectory(s:pyenv_root . '/versions/neovim3/')
       let g:python3_host_prog = $PYENV_ROOT.'/versions/neovim3/bin/python'
+      let g:python3_host_dir = $PYENV_ROOT.'/versions/neovim3/bin/'
     endif
     " Bonus example to set deoplete-jedi path from vim-pyenv.
     augroup pyenv-deoplete-jedi-path
@@ -56,6 +56,8 @@ source ~/.config/nvim/keymap.vim
     augroup END
   endif
 " }
+source ~/.config/nvim/plugins.vim
+source ~/.config/nvim/keymap.vim
 
 filetype plugin indent on
 syntax on

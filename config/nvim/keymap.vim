@@ -64,13 +64,14 @@ let mapleader = " "
 
 " MACROS ARE AMAZING!
 nnoremap Q @q
-
+" Required for operations modifying multiple buffers like rename.
+set hidden
 " ======= PLUGIN Keybindings=========
 " PLUGINS! {
   " CtrlP {
   " I will forget these, so im mapping it to a bunch of things i may think of
     nnoremap <leader>ppb :CtrlPBuffer<CR>
-    nnoremap <leader>ppp :CtrlPBuffer<CR>
+    nnoremap <leader>ppp :CtrlPMixed<CR>
     nnoremap <leader>ppo :CtrlPBuffer<CR>
     nnoremap <leader>ppt :CtrlPTags<CR>
     nnoremap <leader>ppm :CtrlPMRUFiles<CR>
@@ -80,6 +81,9 @@ nnoremap Q @q
     nnoremap <leader>pntf :NERDTreeFind<CR>
     nnoremap <leader>pntt :NERDTreeToggle<CR>
     nnoremap <leader>pnt :NERDTreeToggle<CR>
+  " }
+  " Ranger {
+    nnoremap <leader>prng :RangerCurrentFileExistingOrNewTab<CR>
   " }
 
   " incsearch {
@@ -91,6 +95,7 @@ nnoremap Q @q
       map N  <Plug>(incsearch-nohl-N)
     endif
   " }
+
   " esearch {
     if has('nvim')
       " Start esearch prompt autofilled with one of g:esearch.use initial patterns
@@ -99,6 +104,7 @@ nnoremap Q @q
       call esearch#map('<leader>pfw', 'esearch-word-under-cursor')
     endif
   " }
+
   " vim-maximizer {
     noremap <leader>pmw :MaximizerToggle<CR>
   " }
@@ -109,8 +115,7 @@ nnoremap Q @q
     nnoremap <Leader>pu :GundoToggle<CR>
     nnoremap <Leader>put :GundoToggle<CR>
   " }
-    " Required for operations modifying multiple buffers like rename.
-    set hidden
+
   " git_gutter {
     nnoremap <leader>pggt :GitGutterToggle<CR>
     nnoremap <leader>pggn :GitGutterNextHunk<CR>
@@ -118,7 +123,6 @@ nnoremap Q @q
     nnoremap <leader>pggs :GitGutterStageHunk<CR>
     nnoremap <leader>pggu :GitGutterUndoHunk<CR>
     nnoremap <leader>pggv :GitGutterPreviewHunk<CR>
-
     nnoremap <leader>pgt :GitGutterToggle<CR>
     nnoremap <leader>pgn :GitGutterNextHunk<CR>
     nnoremap <leader>pgp :GitGutterPrevHunk<CR>
@@ -126,6 +130,7 @@ nnoremap Q @q
     nnoremap <leader>pgu :GitGutterUndoHunk<CR>
     nnoremap <leader>pgv :GitGutterPreviewHunk<CR>
   " }
+
   " coc.nvim {
     " as this is the primary IDE thing we have going, coc won't be using too many leader-p
     " mappings, many features will be leader-c (for complete)
