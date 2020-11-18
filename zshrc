@@ -6,6 +6,7 @@ source $ZPLUG_HOME/init.zsh
   zplug "zplug/zplug", hook-build:"zplug --self-manage"
   zplug "zsh-users/zsh-history-substring-search"
   zplug "powerline/powerline"
+  zplug "zsh-users/zsh-autosuggestions"
   zplug "powerline/powerline", use:"powerline/bindings/zsh/powerline.zsh"
   # ^^ for some odd reason it didnt like this unless i removed the use command first
   # zsh-syntax-highlighting must be loaded
@@ -29,7 +30,7 @@ source $ZPLUG_HOME/init.zsh
 # }
 
 # configure python {
-  export PY_SITE_PACKAGE="$(/usr/local/Cellar/python@3.8/3.8.2/bin/python3 -m site | grep /usr/local/lib | sed -e "s/^ *\'\(.*\)\',/\1/")"
+  export PY_SITE_PACKAGE="$(/usr/local/Cellar/python@3.8/3.8.6/bin/python3 -m site | grep /usr/local/lib | sed -e "s/^ *\'\(.*\)\',/\1/")"
   if which pyenv > /dev/null; then
     eval "$(pyenv init -)";
     eval "$(pyenv virtualenv-init -)"
@@ -66,8 +67,22 @@ autoload -U up-line-or-beginning-search
 autoload -U down-line-or-beginning-search
 zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
+
+
+### make keys not suck on mac
+bindkey -e
+backward-kill-dir () {
+    local WORDCHARS=${WORDCHARS/\/}
+    zle backward-kill-word
+}
+zle -N backward-kill-dir
 bindkey "^[[A" up-line-or-beginning-search # Up
 bindkey "^[[B" down-line-or-beginning-search # Down
+bindkey '^[[1;5D' beginning-of-line
+bindkey '^[[1;5C' end-of-line
+bindkey "^[^[[D" backward-word
+bindkey "^[^[[C" forward-word
+bindkey "^w" backward-kill-dir
 zplug load
 
 # Bloody gcloud commands

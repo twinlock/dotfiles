@@ -1,0 +1,19 @@
+{
+  "languageserver": {
+    "kotlin": {
+      "command": "~/Development/kotlin/server/bin/kotlin-language-server",
+      "settings" : {
+        "kotlin":{"compiler":{"jvm":{"target":"1.8"}}}
+      },
+      "filetypes": ["kotlin"]
+    },
+    "golang": {
+      "command": "gopls",
+      "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
+      "filetypes": ["go"],
+      "initializationOptions": {
+        "usePlaceholders": true
+      }
+    }
+  }
+}

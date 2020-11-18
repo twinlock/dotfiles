@@ -15,11 +15,15 @@ echo "export DOTFILE_ROOT='$(pwd)'" >> ~/.bash_profile
 export DOTFILE_ROOT=$(pwd)
 
 brew tap homebrew/cask-fonts
-brew cask install font-dejavusansmono-nerd-font-mono
+brew cask install font-dejavu-sans-mono-nerd-font
+brew cask install font-roboto-mono-nerd-font
 brew install global
 brew install the_silver_searcher
 brew install tmux
 brew install neovim
+brew install node
+curl -sL install-node.now.sh | zsh
+curl --compressed -o- -L https://yarnpkg.com/install.sh | zsh
 brew install zsh
 brew install zplug
 brew install zsh-completions
@@ -61,6 +65,10 @@ function link_rc() {
   fi
 }
 
+# git autocomplete
+curl -o ~/.zsh/git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
+curl -o ~/.zsh/_git https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh
+rm ~/.zcompdump
 link_rc_local bashrc
 link_rc_local zshrc
 link_rc ideavimrc

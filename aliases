@@ -4,12 +4,14 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias ag='ag --path-to-ignore ~/.agignore'
 alias vim='nvim'
+alias vimdiff='nvim'
 alias kanyefidence="curl -s http://usatoday30.usatoday.com/exp/kanye/js/kanye.js | head -n 27 | sed -n 's|\[\"\(.*\)\",.*,|\1|p' | shuf | head -n 1"
 alias gimme-some-kanyefidence="kanyefidence"
 alias tmux="~/tess_bin/tmux_common.sh twinlock"
 alias cddev="cd ~/Development/"
 alias cdd="cd ~/Development/"
 alias rsync="rsync -P"
+alias ios='sudo xcode-select -s /Applications/Xcode\ 11.2.1.app && java8'
 function cd-polyrepo ()
 {
   export POLYREPO=/Users/tess/Development/polyrepo
@@ -21,11 +23,12 @@ function cd-polyrepo ()
 }
 alias cdp="cd-polyrepo"
 alias pro="polyrepo"
-alias ios='sudo xcode-select -s /Applications/Xcode\ 11.2.1.app && java8'
 function sqm-app ()
 {
   export POLYREPO=/Users/tess/Development/polyrepo
   export SQM_SERVICE=$1
+  export SERVICE_NAME=$1
+  export SERVICE_HOME=$POLYREPO/$SQM_SERVICE
   export DATABASE_CLUSTER=${SQM_SERVICE}-001
   export DATABASE_NAME=${SQM_SERVICE:gs/-/_/}
 }
@@ -34,6 +37,7 @@ function sqm-env ()
 {
   export POLYREPO=/Users/tess/Development/polyrepo
   export SQM_ENV=$1
+  export ENVIRONMENT=$1
 }
 alias sqmenv='sqm-env'
 alias sqmdb='sqm database connect -c "$DATABASE_CLUSTER" -n "$SQM_SERVICE" -d "$DATABASE_NAME"'
@@ -47,3 +51,6 @@ function restart-bluetooth(){
   sudo kextload -b com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport
 }
 alias restartbluetooth='restart-blutooth'
+
+# actually make go work
+unset GOFETCH_ALIASES

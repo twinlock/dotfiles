@@ -61,9 +61,13 @@ endif
   let g:indentLine_color_term = 239
   let g:indentLine_color_gui = '#606775'
   let g:indentLine_char = '.'
+  let g:indentLine_concealcursor = 'nc'
 " }
 " Kotlin {
   Plug 'udalov/kotlin-vim'
+" }
+" Go {
+  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 " }
 " Java format {
   Plug 'xuhdev/indent-java.vim'
@@ -71,10 +75,6 @@ endif
 " Delete surrounding parens
 " surround {
   Plug 'tpope/vim-surround'
-" }
-" Pants build syntax
-" vim-pants {
-  Plug 'pantsbuild/vim-pants'
 " }
 " Signal fx syntax
 " signalflow {
@@ -123,77 +123,37 @@ endif
 " }
 
 " ============== autocompletion/ code building ==============
-" ijaas {
-" intellij as a service, testing if it works (thus the non standard location)
-  if !has('nvim')
-  "  Plug '~/workspace/ijaas/vim/'
-  endif
+" json {
+  Plug 'kevinoid/vim-jsonc'
 " }
-" deoplete {
-  if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'beeender/Comrade'
-  else
-    Plug 'Shougo/deoplete.nvim'
-    Plug 'roxma/nvim-yarp'
-    Plug 'roxma/vim-hug-neovim-rpc'
-  endif
-  " Use deoplete.
-  let g:deoplete#enable_at_startup = 1
+" coc.nvim {
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  " Python
+  Plug 'neoclide/coc-python', {'do': 'yarn install --frozen-lockfile'}
+  " Json
+  Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
+  " GO
+  autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
+  " general coc.nvim configs, see the keymap for key setups{
+    " Give more space for displaying messages.
+    set cmdheight=2
+    " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+    " delays and poor user experience.
+    set updatetime=300
+    " Don't pass messages to |ins-completion-menu|.
+    set shortmess+=c
+    " Always show the signcolumn, otherwise it would shift the text each time
+    set signcolumn=yes
+  " }
 " }
-" Java:
-" Neomake {
-  if !exists('g:vscode') && has('nvim')
-    Plug 'neomake/neomake'
-    " stupid way to disable java check
-    let g:loaded_neomake_java_javac_maker = 1
-    autocmd! BufWritePost *.rb :Neomake
-    autocmd! BufWritePost *.py :Neomake
-  endif
-" }
-" Python:
-" Jedi {
-  Plug 'davidhalter/jedi'
-" }
-" Pyclient {
-  Plug 'neovim/python-client'
-" }
-" Deoplete Jedi {
-  Plug 'zchee/deoplete-jedi'
-" }
-" vim pyenv {
-  Plug 'lambdalisue/vim-pyenv'
-" }
-" vim pydocstring {
-  Plug 'heavenshell/vim-pydocstring'
-" }
-" Ruby:
-" vim-ruby {
-  Plug 'vim-ruby/vim-ruby'
-" }
-" Rails support (:A, :R, :Rmigration, :Rextract)
-" vim-rails {
-  Plug 'tpope/vim-rails', { 'for': ['ruby', 'eruby', 'haml', 'slim'] }
-" }
-" Bundler support (plays nicely with tpope/gem-ctags)
-" vim-bundler {
-  Plug 'tpope/vim-bundler', { 'for': ['ruby', 'eruby', 'haml', 'slim'] }
-" }
-" Terraform support
-" {
-  Plug 'hashivim/vim-terraform'
-  Plug 'vim-syntastic/syntastic'
-  Plug 'juliosueiras/vim-terraform-completion'
-" }
-
 " ============== tags/search related ==============
 " all this does is create tags async
 " gen_tags {
-  Plug 'jsfaint/gen_tags.vim'
-  let g:gen_tags#ctags_opts='--exclude=*.js -R'
-" }
-" tagbar {
-  Plug 'majutsushi/tagbar'
+  "Plug 'jsfaint/gen_tags.vim'
+  "let g:gen_tags#ctags_opts='--exclude=*.js -R'
+" "}
+" "tagbar {
+  "Plug 'majutsushi/tagbar'
 " }
 
 " incremental search for vim

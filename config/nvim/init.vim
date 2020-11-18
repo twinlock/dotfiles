@@ -1,4 +1,19 @@
-
+" install vim plug {
+  if empty(glob('~/.config/nvim/autoload/plug.vim'))
+    if has('nvim')
+      silent !curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim 
+      autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    endif
+  endif
+  if empty(glob('~/.vim/autoload/plug.vim'))
+    if !has('nvim')
+      silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+      autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    endif
+  endif
+" }
 " python config {
 " Set pyenv root.
   if has('nvim')
@@ -23,7 +38,7 @@ source ~/.config/nvim/keymap.vim
 " use a virtualenv for python
   if has('nvim')
     " When reading a buffer (after 1s), and when writing (no delay).
-    call neomake#configure#automake('rw', 1000)
+    " call neomake#configure#automake('rw', 1000)
 
     if isdirectory(s:pyenv_root . '/versions/neovim2/')
       let g:python_host_prog = $PYENV_ROOT.'/versions/neovim2/bin/python'
