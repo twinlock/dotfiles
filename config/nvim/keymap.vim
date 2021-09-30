@@ -13,6 +13,7 @@ let mapleader = " "
 " <leader>w => window things (movement is just hjkl thou)
 " <leader>g => vim things (numbers, turn off search highlight)
 " <leader>p => plugin things (nerd tree, eclim, etc)
+" <leader>c => coc.nvim things (special plugin) 
 " ^^^ exception is ctrlp which is mapped to... ctrl+p
 
 " WINDOWS! {
@@ -82,8 +83,8 @@ set hidden
     nnoremap <leader>pntt :NERDTreeToggle<CR>
     nnoremap <leader>pnt :NERDTreeToggle<CR>
   " }
-  " Ranger {
-    nnoremap <leader>prng :RangerCurrentFileExistingOrNewTab<CR>
+  " Vista {
+    nnoremap <leader>pvs :Vista!!<CR>
   " }
 
   " incsearch {
@@ -142,6 +143,7 @@ set hidden
           \ <SID>check_back_space() ? "\<TAB>" :
           \ coc#refresh()
     inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+    inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
     function! s:check_back_space() abort
       let col = col('.') - 1

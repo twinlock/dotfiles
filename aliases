@@ -12,7 +12,7 @@ alias cddev="cd-development"
 alias cdd="cd-development"
 function cd-development ()
 {
-  export DEVELOPMENT=/Users/tess/Development
+  export DEVELOPMENT=/Users/$USER/Development
   cd $DEVELOPMENT
   if [ ! -z "$1" ]
   then
@@ -23,7 +23,7 @@ alias rsync="rsync -P"
 alias ios='sudo xcode-select -s /Applications/Xcode\ 11.2.1.app && java8'
 function cd-polyrepo ()
 {
-  export POLYREPO=/Users/tess/Development/polyrepo
+  export POLYREPO=/Users/$USER/Development/polyrepo
   cd $POLYREPO
   if [ ! -z "$1" ]
   then
@@ -34,9 +34,10 @@ alias cdp="cd-polyrepo"
 alias pro="polyrepo"
 function sqm-app ()
 {
-  export POLYREPO=/Users/tess/Development/polyrepo
+  export POLYREPO=/Users/$USER/Development/polyrepo
   export SQM_SERVICE=$1
   export SERVICE_NAME=$1
+  export SERVICE=$1
   export SERVICE_HOME=$POLYREPO/$SQM_SERVICE
   export DATABASE_CLUSTER=${SQM_SERVICE}-001
   export DATABASE_NAME=${SQM_SERVICE:gs/-/_/}
@@ -44,7 +45,7 @@ function sqm-app ()
 alias sqmapp='sqm-app'
 function sqm-env ()
 {
-  export POLYREPO=/Users/tess/Development/polyrepo
+  export POLYREPO=/Users/$USER/Development/polyrepo
   export SQM_ENV=$1
   export ENVIRONMENT=$1
 }

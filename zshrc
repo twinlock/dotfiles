@@ -30,7 +30,7 @@ source $ZPLUG_HOME/init.zsh
 # }
 
 # configure python {
-  export PY_SITE_PACKAGE="$(/usr/local/Cellar/python@3.8/3.8.6/bin/python3 -m site | grep /usr/local/lib | sed -e "s/^ *\'\(.*\)\',/\1/")"
+  export PY_SITE_PACKAGE="$(/usr/local/Cellar/python@3.8/3.8.8_1/bin/python3 -m site | grep /usr/local/lib | sed -e "s/^ *\'\(.*\)\',/\1/")"
   if which pyenv > /dev/null; then
     eval "$(pyenv init -)";
     eval "$(pyenv virtualenv-init -)"

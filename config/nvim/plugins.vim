@@ -47,9 +47,6 @@ endif
   Plug 'luochen1990/rainbow'
   let g:rainbow_active = 1
 " }
-" devicons {
-  Plug 'ryanoasis/vim-devicons'
-" }
 " vim-slim {
   Plug 'slim-template/vim-slim'
 " }
@@ -63,14 +60,17 @@ endif
   let g:indentLine_char = '.'
   let g:indentLine_concealcursor = 'nc'
 " }
+" Polyglot {
+  Plug 'sheerun/vim-polyglot'
+" }
 " Kotlin {
-  Plug 'udalov/kotlin-vim'
+"  Plug 'udalov/kotlin-vim'
 " }
 " Go {
-  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+"  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 " }
 " Java format {
-  Plug 'xuhdev/indent-java.vim'
+"  Plug 'xuhdev/indent-java.vim'
 " }
 " Delete surrounding parens
 " surround {
@@ -83,18 +83,20 @@ endif
 
 " ============== file movement ==============
 " NerdTree {
-  Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
-  " While the git plugin is nice, ive had all sorts of performance problems with it, not sure what
-  " to do other than to just remove it, sadly.
-  " Plug 'Xuyuanp/nerdtree-git-plugin'
+  Plug 'preservim/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
+  Plug 'Xuyuanp/nerdtree-git-plugin'
+  let g:NERDTreeGitStatusUseNerdFonts = 1
   let g:NERDTreeDirArrows=0
   let g:NERDTreeShowBookmarks=1
   let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$', '^\.pants.d$']
+  " prevent buffers from opening in nerdtree's buffer
+  autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr('$') > 1 | b# | endif
+  " prevent plug from doing the same
+  let g:plug_window = 'noautocmd vertical topleft new'
 " }
-" Ranger {
-  Plug 'rbgrouleff/bclose.vim'
-  Plug 'francoiscabrol/ranger.vim'
-  let g:ranger_command_override = g:python3_host_dir . '/ranger'
+" devicons {
+" moved to near nerdtree, needs to be installed after that to avoid compatibility issues
+  Plug 'ryanoasis/vim-devicons'
 " }
 
 " ctrlp {
@@ -134,9 +136,11 @@ endif
 " coc.nvim {
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
   " Python
-  Plug 'neoclide/coc-python', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build' }
+  Plug 'davidhalter/jedi-vim'
   " Json
   Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'weirongxu/coc-kotlin', {'do': 'yarn install --frozen-lockfile'}
   " GO
   autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
   " general coc.nvim configs, see the keymap for key setups{
@@ -152,15 +156,13 @@ endif
   " }
 " }
 " ============== tags/search related ==============
-" all this does is create tags async
-" gen_tags {
-  "Plug 'jsfaint/gen_tags.vim'
-  "let g:gen_tags#ctags_opts='--exclude=*.js -R'
-" "}
-" "tagbar {
-  "Plug 'majutsushi/tagbar'
+" Vista is basically tagbar in a LSP world
+" Vista {
+  Plug 'liuchengxu/vista.vim'
+  let g:vista_default_executive = 'coc'
+  let g:vista#renderer#enable_icon = 1
+  let g:vista_fzf_preview = ['right:50%']
 " }
-
 " incremental search for vim
 " incsearch {
   Plug 'haya14busa/incsearch.vim'
@@ -226,11 +228,6 @@ endif
 " }
 " session management {
   Plug 'tpope/vim-obsession'
-" }
-" uniting all the stupidity {
-  if has('nvim')
-    Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
-  endif
 " }
 
 call plug#end()
