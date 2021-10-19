@@ -79,9 +79,11 @@ set hidden
     nnoremap <leader>pph :CtrlPMRUFiles<CR>
   " }
   " NERD Tree {
-    nnoremap <leader>pntf :NERDTreeFind<CR>
-    nnoremap <leader>pntt :NERDTreeToggle<CR>
-    nnoremap <leader>pnt :NERDTreeToggle<CR>
+    nnoremap <leader>pntf :CHADopen<CR>
+    nnoremap <leader>pnt :CHADopen<CR>
+    "nnoremap <leader>pntf :NERDTreeFind<CR>
+    "nnoremap <leader>pntt :NERDTreeToggle<CR>
+    "nnoremap <leader>pnt :NERDTreeToggle<CR>
   " }
   " Vista {
     nnoremap <leader>pvs :Vista!!<CR>
@@ -96,14 +98,22 @@ set hidden
       map N  <Plug>(incsearch-nohl-N)
     endif
   " }
+  " telescope {
+  " " Find files using Telescope command-line sugar.
+    nnoremap <leader>pff <cmd>Telescope find_files<cr>
+    nnoremap <leader>pfg <cmd>Telescope live_grep<cr>
+    nnoremap <leader>pfb <cmd>Telescope buffers<cr>
+    nnoremap <leader>pfh <cmd>Telescope help_tags<cr>
+    
+  " }
 
   " esearch {
-    if has('nvim')
-      " Start esearch prompt autofilled with one of g:esearch.use initial patterns
-      call esearch#map('<leader>pff', 'esearch')
-      " Start esearch autofilled with a word under the cursor
-      call esearch#map('<leader>pfw', 'esearch-word-under-cursor')
-    endif
+  "  if has('nvim')
+  "    " Start esearch prompt autofilled with one of g:esearch.use initial patterns
+  "    call esearch#map('<leader>pff', 'esearch')
+  "    " Start esearch autofilled with a word under the cursor
+  "    call esearch#map('<leader>pfw', 'esearch-word-under-cursor')
+  "  endif
   " }
 
   " vim-maximizer {

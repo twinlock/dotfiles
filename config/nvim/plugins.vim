@@ -34,9 +34,18 @@ endif
   let g:airline#extensions#tabline#show_buffers = 0
 " }
 
-" Gruvbox {
+" Colorscheme {
+  " blueish 
+  Plug 'sainnhe/edge'
+  let g:edge_style = 'aura'
+  let g:edge_enable_italic = 1
+  let g:edge_disable_italic_comment = 1
+
+  " redish 
+  Plug 'sainnhe/gruvbox-material'
+  " redish and shaper 
   Plug 'morhetz/gruvbox'
-  let g:gruvbox_contrast_dark="soft"
+  let g:gruvbox_contrast_dark="medium"
   if !has("gui_running")
       let g:gruvbox_italicize_comments=0
   endif
@@ -48,7 +57,7 @@ endif
   let g:rainbow_active = 1
 " }
 " vim-slim {
-  Plug 'slim-template/vim-slim'
+"  Plug 'slim-template/vim-slim'
 " }
 
 " ============== file formatting ==============
@@ -83,6 +92,10 @@ endif
 
 " ============== file movement ==============
 " NerdTree {
+  Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
+  let g:chadtree_settings = {
+        \ "ignore.name_glob" : ['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$'],
+        \"theme.text_colour_set" : "nord" }
   Plug 'preservim/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
   Plug 'Xuyuanp/nerdtree-git-plugin'
   let g:NERDTreeGitStatusUseNerdFonts = 1
@@ -138,10 +151,14 @@ endif
   " Python
   Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build' }
   Plug 'davidhalter/jedi-vim'
+    " disable jedi so that way only the coc one works
+    let g:jedi#completions_enabled = 0
   " Json
   Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
   Plug 'weirongxu/coc-kotlin', {'do': 'yarn install --frozen-lockfile'}
   " GO
+  Plug 'josa42/coc-go', { 'do': 'yarn install --frozen-lockfile && yarn build' }
+
   autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
   " general coc.nvim configs, see the keymap for key setups{
     " Give more space for displaying messages.
@@ -175,25 +192,12 @@ endif
     set grepprg=ag\ --nogroup\ --nocolor
   endif
 " }
-" similar to sublime's find replace:
-" esearch {
-  Plug 'eugen0329/vim-esearch'
+" Native neovim searching
+" telescope {
   if has('nvim')
-    let g:esearch = {
-          \ 'adapter':    'ag',
-          \ 'backend':    'nvim',
-          \ 'out':        'win',
-          \ 'batch_size': 1000,
-          \ 'use':        ['visual', 'hlsearch', 'last'],
-          \}
-  else
-    let g:esearch = {
-          \ 'adapter':    'ag',
-          \ 'backend':    'vim8',
-          \ 'out':        'win',
-          \ 'batch_size': 1000,
-          \ 'use':        ['visual', 'hlsearch', 'last'],
-          \}
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-telescope/telescope.nvim'
+    Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
   endif
 " }
 " Use * on visually selected text to search for it

@@ -1,0 +1,17 @@
+# Title of your commit
+
+Description
+-----------
+# Why this change
+# What you're changing
+#
+# Don't forget:
+#   - Add tests
+#   - Comment up the complicated stuff
+#   - run your code on staging
+#   - update documentation
+#
+# At the end:
+#   Include Co-authored-by for all contributors. 
+#   Include at least one empty line before it. Format: 
+# Co-authored-by: name <user@users.noreply.github.com>

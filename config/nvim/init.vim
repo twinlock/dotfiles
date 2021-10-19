@@ -92,7 +92,9 @@ set mouse=a
 " }
 
 " color scheme {
-  colorscheme gruvbox
+  colorscheme edge
+  " colorscheme gruvbox-material
+
   if has('nvim')
     let $NVIM_TUI_ENABLE_TRUE_COLOR=1
   else
@@ -105,11 +107,6 @@ set mouse=a
   hi Visual term=reverse ctermbg=none guibg=Grey
   hi Search cterm=NONE ctermfg=darkgrey ctermbg=blue
   set background=dark
-
-  highlight scalaDef cterm=bold
-  highlight scalaClass cterm=bold
-  highlight scalaObject cterm=bold
-  highlight scalaTrait cterm=bold
 
   " Bold the cursor linenumber
   hi clear CursorLine
@@ -129,24 +126,4 @@ set mouse=a
   let g:syntastic_auto_loc_list = 1
   let g:syntastic_check_on_open = 1
   let g:syntastic_check_on_wq = 0
-" }
-" Terraform config
-" {
-"  let g:deoplete#omni_patterns = {}
-"
-"  call deoplete#custom#option('omni_patterns', {
-"  \ 'complete_method': 'omnifunc',
-"  \ 'terraform': '[^ *\t"{=$]\w*',
-"  \})
-"
-"  call deoplete#initialize()
-"
-"  " (Optional) Enable terraform plan to be include in filter
-"  let g:syntastic_terraform_tffilter_plan = 1
-"
-"  " (Optional) Default: 0, enable(1)/disable(0) plugin's keymapping
-"  let g:terraform_completion_keys = 1
-"
-"  " (Optional) Default: 1, enable(1)/disable(0) terraform module registry completion
-"  let g:terraform_registry_module_completion = 0 
 " }
