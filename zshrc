@@ -30,12 +30,8 @@ source $ZPLUG_HOME/init.zsh
 # }
 
 # configure python {
-  export PY_SITE_PACKAGE="$(/usr/local/Cellar/python@3.8/3.8.12/bin/python3 -m site | grep /usr/local/lib | sed -e "s/^ *\'\(.*\)\',/\1/")"
-  if which pyenv > /dev/null; then
-    eval "$(pyenv init -)";
-    eval "$(pyenv virtualenv-init -)"
-    export PYENV_ROOT="$(pyenv root)"
-  fi
+  alias python=/usr/local/bin/python3
+  export PY_SITE_PACKAGE="$(/usr/local/Cellar/python@3.9/3.9.13_2/bin/python3 -m site | grep /usr/local/lib | sed -e "s/^ *\'\(.*\)\',/\1/")"
 # }
 
 if [[ -d "$PY_SITE_PACKAGE/powerline/" ]]; then
@@ -84,20 +80,6 @@ bindkey "^[^[[D" backward-word
 bindkey "^[^[[C" forward-word
 bindkey "^w" backward-kill-dir
 zplug load
-
-# Bloody gcloud commands
-# {
-  # set the python version, this will require creating pyenv virtualenv 2.7.16 gcloud
-  if [[ -d "$PYENV_ROOT/versions/gcloud" ]]; then
-    export CLOUDSDK_PYTHON="$PYENV_ROOT/versions/gcloud/bin/python"
-    export CLOUDSDK_PYTHON_SITEPACKAGES=0
-  fi
-  # The next line updates PATH for the Google Cloud SDK.
-  if [ -f '/Users/tess/Applications/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tess/Applications/google-cloud-sdk/path.zsh.inc'; fi
-
-  # The next line enables shell command completion for gcloud.
-  if [ -f '/Users/tess/Applications/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/tess/Applications/google-cloud-sdk/completion.zsh.inc'; fi
-# }
 
 # Handy Gradle things
 # {

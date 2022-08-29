@@ -4,8 +4,8 @@
       "command": "/Users/tess/Development/kotlin/kotlin-language-server/server/build/install/server/bin/kotlin-language-server",
       "filetypes": ["kotlin"],
        "settings" : {
-        "kotlin.compiler.jvm.target":"1.8",
-        "kotlin":{"compiler":{"jvm":{"target":"1.8"}}}
+        "kotlin.compiler.jvm.target":"17",
+        "kotlin":{"compiler":{"jvm":{"target":"17"}}}
       }
     },
     "golang": {
