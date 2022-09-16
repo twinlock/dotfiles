@@ -1,14 +1,19 @@
-export ZPLUG_HOME=/usr/local/opt/zplug
+export ZPLUG_HOME=/opt/homebrew/opt/zplug
 source $ZPLUG_HOME/init.zsh
 
+# JVM
+export JAVA_HOME=`/usr/libexec/java_home -v 17`
+
+# Allow more open files than the OSX default of 256
+if [ `ulimit -n` -lt 8192 ]; then
+    ulimit -n 8192
+fi
 # plugins {
   # Make sure to use double quotes
   zplug "zplug/zplug", hook-build:"zplug --self-manage"
   zplug "zsh-users/zsh-history-substring-search"
-  zplug "powerline/powerline"
   zplug "zsh-users/zsh-autosuggestions"
-  zplug "powerline/powerline", use:"powerline/bindings/zsh/powerline.zsh"
-  # ^^ for some odd reason it didnt like this unless i removed the use command first
+  zplug "romkatv/powerlevel10k", as:theme, depth:1
   # zsh-syntax-highlighting must be loaded
   # after executing compinit command and sourcing other plugins
   # (If the defer tag is given 2 or above, run after compinit command)
@@ -21,24 +26,24 @@ source $ZPLUG_HOME/init.zsh
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 # configure ruby {
-  if [[ -d "$HOME/.rvm" ]]; then
-    export PATH="$PATH:$HOME/.rvm/bin"
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-  fi
+#  if [[ -d "$HOME/.rvm" ]]; then
+#    export PATH="$PATH:$HOME/.rvm/bin"
+#    export NVM_DIR="$HOME/.nvm"
+#    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+#    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+#  fi
 # }
-
 # configure python {
-  alias python=/usr/local/bin/python3
-  export PY_SITE_PACKAGE="$(/usr/local/Cellar/python@3.9/3.9.13_2/bin/python3 -m site | grep /usr/local/lib | sed -e "s/^ *\'\(.*\)\',/\1/")"
-# }
-
-if [[ -d "$PY_SITE_PACKAGE/powerline/" ]]; then
-  export POWERLINE_ROOT="$PY_SITE_PACKAGE/powerline/"
-  echo "starting powerline daemon"
-  powerline-daemon -q
-fi
+#  alias python=/usr/bin/python3
+#  export PY_SITE_PACKAGE="$(python3 -m site | grep tess/Library | grep , | sed -e "s/^ *\'\(.*\)\',/\1/")"
+## }
+#
+#if [[ -d "$PY_SITE_PACKAGE/powerline/" ]]; then
+#  export POWERLINE_ROOT="$PY_SITE_PACKAGE/powerline/"
+#  source $POWERLINE_ROOT/bindings/zsh/powerline.zsh
+#  echo "starting powerline daemon"
+#  powerline-daemon -q
+#fi
 
 HISTSIZE=10000000
 SAVEHIST=10000000
@@ -109,5 +114,27 @@ zplug load
 
 zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
 fpath=(~/.zsh $fpath)
+
+# Square development things
+if [ -z $SQUARE_HOME ] && [ -d "$HOME/Development" ]; then
+  export SQUARE_HOME=$HOME/Development
+fi
+
+
+if [[ ! -z "${POLYREPO}" ]]; then
+  export POLYREPO="${SQUARE_HOME}/polyrepo"
+fi
+ 
+# Make backend bash aliases available
+if [[ -f "${POLYREPO}/cash-common/cash/script/backend_bash_aliases" ]]; then
+  source ${POLYREPO}/cash-common/cash/script/backend_bash_aliases
+fi
+ 
+# Ensure JAVA_HOME is set to JDK 11
+export JAVA_HOME="$(/usr/libexec/java_home -v 11)"
+
+path+=(/Users/tess/Development/kotlin-language-server/server/build/install/server/bin/)
+
+typeset -U path PATH
 
 autoload -Uz compinit && compinit

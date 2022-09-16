@@ -70,7 +70,7 @@ endif
   let g:indentLine_concealcursor = 'nc'
 " }
 " Polyglot {
-  Plug 'sheerun/vim-polyglot'
+"  Plug 'sheerun/vim-polyglot'
 " }
 " Kotlin {
 "  Plug 'udalov/kotlin-vim'
@@ -92,20 +92,22 @@ endif
 
 " ============== file movement ==============
 " NerdTree {
-  Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
-  let g:chadtree_settings = {
-        \ "ignore.name_glob" : ['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$'],
-        \"theme.text_colour_set" : "nord" }
-  Plug 'preservim/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
-  Plug 'Xuyuanp/nerdtree-git-plugin'
-  let g:NERDTreeGitStatusUseNerdFonts = 1
-  let g:NERDTreeDirArrows=0
-  let g:NERDTreeShowBookmarks=1
-  let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$', '^\.pants.d$']
+  "Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
+  "let g:chadtree_settings = {
+  "      \ "ignore.name_glob" : ['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$'],
+  "      \"theme.text_colour_set" : "nord" }
+  "Plug 'preservim/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
+  "Plug 'kyazdani42/nvim-tree.lua'
+  "Plug 'kyazdani42/nvim-web-devicons' " optional, for file icons
+  "Plug 'Xuyuanp/nerdtree-git-plugin'
+  "let g:NERDTreeGitStatusUseNerdFonts = 1
+  "let g:NERDTreeDirArrows=0
+  "let g:NERDTreeShowBookmarks=1
+  "let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$', '^\.pants.d$']
   " prevent buffers from opening in nerdtree's buffer
-  autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr('$') > 1 | b# | endif
+  "autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr('$') > 1 | b# | endif
   " prevent plug from doing the same
-  let g:plug_window = 'noautocmd vertical topleft new'
+  "let g:plug_window = 'noautocmd vertical topleft new'
 " }
 " devicons {
 " moved to near nerdtree, needs to be installed after that to avoid compatibility issues

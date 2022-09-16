@@ -1,13 +1,35 @@
 # /bin/zsh
+# Stolen from square's config_files:
+# Convenient stuff
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
+
 alias ag='ag --path-to-ignore ~/.agignore'
+alias l="ls -Gal"
+alias ls="ls -G"
+alias ll="ls -Ghal"
+alias empties="find . -empty -type d -maxdepth 2"
+tableflip() {
+  echo "（╯°□°）╯ ┻━┻";
+}
+alias pg="ps ax | grep -v grep | grep -i "
+alias ip="ifconfig | grep 'inet '"
+alias top='top -o cpu'
+
+#git
+alias gs='git status'
+
 alias vim='nvim'
 alias vimdiff='nvim'
 alias kanyefidence="curl -s http://usatoday30.usatoday.com/exp/kanye/js/kanye.js | head -n 27 | sed -n 's|\[\"\(.*\)\",.*,|\1|p' | shuf | head -n 1"
 alias gimme-some-kanyefidence="kanyefidence"
-alias tmux="~/tess_bin/tmux_common.sh twinlock"
+#alias tmux="~/tess_bin/tmux_common.sh twinlock"
+
+# Cash/square directory movement
 alias cddev="cd-development"
 alias cdd="cd-development"
 function cd-development ()
@@ -20,7 +42,6 @@ function cd-development ()
   fi
 }
 alias rsync="rsync -P"
-alias ios='sudo xcode-select -s /Applications/Xcode\ 11.2.1.app && java8'
 function cd-polyrepo ()
 {
   export POLYREPO=/Users/$USER/Development/polyrepo
@@ -32,6 +53,8 @@ function cd-polyrepo ()
 }
 alias cdp="cd-polyrepo"
 alias pro="polyrepo"
+
+#Very Cash specific stuff
 function sqm-app ()
 {
   export POLYREPO=/Users/$USER/Development/polyrepo
