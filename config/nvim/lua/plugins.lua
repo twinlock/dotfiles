@@ -1,3 +1,118 @@
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+vim.g.mapleader = " "
+
+require("lazy").setup({
+  -- theme
+  {
+    'sainnhe/edge',
+    config=function()
+      vim.cmd[[
+        let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+        set termguicolors
+        let g:edge_style = 'aura'
+        let g:edge_enable_italic = 0
+        let g:edge_disable_italic_comment = 1
+        colorscheme edge
+      ]]
+    end
+  },
+  -- status line
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'kyazdani42/nvim-web-devicons' }
+  },
+  -- syntax highlighting 
+  {
+      "nvim-treesitter/nvim-treesitter",
+      build = ":TSUpdate",
+      config = function () 
+        local configs = require("nvim-treesitter.configs")
+
+        configs.setup({
+            ensure_installed = { "bash", "c", "c_sharp", "cpp", "css", "lua", "vim", "vimdoc", "kotlin", "java",  "javascript", "html" },
+            sync_install = false,
+            highlight = { enable = true },
+            indent = { enable = true },  
+          })
+      end
+  },
+  { 'nvim-treesitter/nvim-treesitter-textobjects' },
+  {
+    "kylechui/nvim-surround",
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    config = function()
+        require("nvim-surround").setup({
+            -- Configuration here, or leave empty to use defaults
+        })
+    end
+  },
+  -- ctrlp movement
+  { "ctrlpvim/ctrlp.vim",
+    config= function()
+      vim.cmd[[
+        let g:ctrlp_match_window = 'order:ttb,max:20'
+        " dont serch but every 250ms, eliminates some annoying fumble finger behavior
+        let g:ctrlp_lazy_update = 150
+        let g:ctrlp_working_path_mode = 'ra'
+        let g:ctrlp_working_path_mode = 0
+        " Regex mode by default (<c-r> to toggle)
+        let g:ctrlp_regexp = 0
+        let g:ctrlp_custom_ignore = {
+                      \ 'dir':  '\.git$\|\.hg$\|\.svn$|\.pants.d$',
+                      \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$|\.swp$' }
+        if executable('ag')
+          let s:ctrlp_fallback = 'ag %s --nocolor -l -g ""'
+        else
+          let s:ctrlp_fallback = 'find %s -type f'
+        endif
+        let g:ctrlp_user_command = {
+                      \ 'types': {
+                      \ 1: ['.git', 'cd %s && git ls-files . --cached --exclude-standard --others'],
+                      \ 2: ['.hg', 'hg --cwd %s locate -I .'],
+                      \ },
+                      \ 'fallback': s:ctrlp_fallback
+                      \ }
+      ]]
+    end
+  },
+  -- telescope, fast file fuzzy finder
+  {
+    'nvim-telescope/telescope.nvim', tag = '0.1.0',
+    dependencies = { {'nvim-lua/plenary.nvim'} }
+  },
+  -- Vista
+  { 'liuchengxu/vista.vim' },
+  -- file explorer
+  {
+    'kyazdani42/nvim-tree.lua',
+    dependencies = {
+      'kyazdani42/nvim-web-devicons',
+    },
+  },
+  -- LSP stuff
+  { 'neovim/nvim-lspconfig' },
+  -- Autocompletion plugin
+  { 'hrsh7th/nvim-cmp' },
+  -- LSP source for nvim-cmp
+  { 'hrsh7th/cmp-nvim-lsp' },
+  -- Apparently it needs snippets
+  { 'L3MON4D3/LuaSnip' },
+  -- Snippets source for nvim-cmp
+  { 'saadparwaiz1/cmp_luasnip' },
+})
+--[==[ 
 vim.cmd [[packadd packer.nvim]]
 
 require('packer').startup(function(use)
@@ -85,6 +200,7 @@ require('packer').startup(function(use)
   use 'saadparwaiz1/cmp_luasnip'
   
 end)
+]==]
 
 require('lualine').setup {
   options = { 
@@ -169,7 +285,7 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, bufopts)
 end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 local lspconfig = require('lspconfig')
 
