@@ -42,7 +42,7 @@ let mapleader = " "
   endif
 " }
 
-" BASIC VIM FUCNTIONS {
+" BASIC VIM FUNCTIONS {
   " stop searching with gm
   nnoremap <silent> <leader>gm :silent noh<CR>
   " Enter/leave numbers .
