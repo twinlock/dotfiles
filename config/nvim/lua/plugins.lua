@@ -16,10 +16,10 @@ require("lazy").setup({
   -- theme
   {
     'sainnhe/edge',
+    lazy = false,
+    priority = 1000,
     config=function()
       vim.cmd[[
-        let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-        set termguicolors
         let g:edge_style = 'aura'
         let g:edge_enable_italic = 0
         let g:edge_disable_italic_comment = 1
@@ -112,95 +112,6 @@ require("lazy").setup({
   -- Snippets source for nvim-cmp
   { 'saadparwaiz1/cmp_luasnip' },
 })
---[==[ 
-vim.cmd [[packadd packer.nvim]]
-
-require('packer').startup(function(use)
-  -- Packer can manage itself
-  use 'wbthomason/packer.nvim'
-  -- theme
-  use {'sainnhe/edge', config=vim.cmd[[
-    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-    set termguicolors
-    let g:edge_style = 'aura'
-    let g:edge_enable_italic = 1
-    let g:edge_disable_italic_comment = 1
-    colorscheme edge
-  ]]}
-  -- status line
-  use {
-    'nvim-lualine/lualine.nvim',
-    requires = { 'kyazdani42/nvim-web-devicons', opt = true }
-  }
-  -- syntax highlighting 
-  use {
-    'nvim-treesitter/nvim-treesitter',
-    run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
-  }
-  use 'nvim-treesitter/nvim-treesitter-textobjects'
-
-  use({
-    "kylechui/nvim-surround",
-      tag = "*", -- Use for stability; omit to use `main` branch for the latest features
-      config = function()
-          require("nvim-surround").setup({
-              -- Configuration here, or leave empty to use defaults
-          })
-      end
-  })
-
-  -- ctrlp movement
-  use {'ctrlpvim/ctrlp.vim', config=vim.cmd[[
-    let g:ctrlp_match_window = 'order:ttb,max:20'
-    " dont serch but every 250ms, eliminates some annoying fumble finger behavior
-    let g:ctrlp_lazy_update = 150
-    let g:ctrlp_working_path_mode = 'ra'
-    let g:ctrlp_working_path_mode = 0
-    " Regex mode by default (<c-r> to toggle)
-    let g:ctrlp_regexp = 0
-    let g:ctrlp_custom_ignore = {
-                  \ 'dir':  '\.git$\|\.hg$\|\.svn$|\.pants.d$',
-                  \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$|\.swp$' }
-    if executable('ag')
-      let s:ctrlp_fallback = 'ag %s --nocolor -l -g ""'
-    else
-      let s:ctrlp_fallback = 'find %s -type f'
-    endif
-    let g:ctrlp_user_command = {
-                  \ 'types': {
-                  \ 1: ['.git', 'cd %s && git ls-files . --cached --exclude-standard --others'],
-                  \ 2: ['.hg', 'hg --cwd %s locate -I .'],
-                  \ },
-                  \ 'fallback': s:ctrlp_fallback
-                  \ }
-  ]]}
-  -- telescope, fast file fuzzy finder
-  use {
-    'nvim-telescope/telescope.nvim', tag = '0.1.0',
-    requires = { {'nvim-lua/plenary.nvim'} }
-  }
-  -- Vista
-  use 'liuchengxu/vista.vim'
-  -- file explorer
-  use {
-    'kyazdani42/nvim-tree.lua',
-    requires = {
-      'kyazdani42/nvim-web-devicons',
-    },
-  }
-  -- LSP stuff
-  use 'neovim/nvim-lspconfig'
-  -- Autocompletion plugin
-  use 'hrsh7th/nvim-cmp' 
-  -- LSP source for nvim-cmp
-  use 'hrsh7th/cmp-nvim-lsp'
-  -- Apparently it needs snippets
-  use 'L3MON4D3/LuaSnip'
-  -- Snippets source for nvim-cmp
-  use 'saadparwaiz1/cmp_luasnip'
-  
-end)
-]==]
 
 require('lualine').setup {
   options = { 
