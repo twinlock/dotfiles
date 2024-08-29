@@ -14,19 +14,20 @@ vim.g.mapleader = " "
 
 require("lazy").setup({
   -- theme
-  {
-    'sainnhe/edge',
-    lazy = false,
-    priority = 1000,
-    config=function()
-      vim.cmd[[
-        let g:edge_style = 'aura'
-        let g:edge_enable_italic = 0
-        let g:edge_disable_italic_comment = 1
-        colorscheme edge
-      ]]
-    end
-  },
+  { 'JafarDakhan/vim-gml' },
+  --{
+  --'sainnhe/edge',
+  --lazy = false,
+  --priority = 1000,
+  --config=function()
+  --  vim.cmd[[
+  --      let g:edge_style = 'aura'
+  --     let g:edge_enable_italic = 0
+  --    let g:edge_disable_italic_comment = 1
+  --    colorscheme edge
+  --  ]]
+  --end
+  --},
   -- status line
   {
     'nvim-lualine/lualine.nvim',
