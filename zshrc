@@ -1,8 +1,10 @@
-export ZPLUG_HOME=/opt/homebrew/opt/zplug
-source $ZPLUG_HOME/init.zsh
 
-# JVM
-export JAVA_HOME=`/usr/libexec/java_home -v 17`
+if [[ "$(uname)" == "Darwin" ]]; then
+  export ZPLUG_HOME=/opt/homebrew/opt/zplug
+else
+  export ZPLUG_HOME=$HOME/.zplug/
+fi
+source $ZPLUG_HOME/init.zsh
 
 # Allow more open files than the OSX default of 256
 if [ `ulimit -n` -lt 8192 ]; then
@@ -23,27 +25,6 @@ fi
 [[ -f "$HOME/.aliases" ]] && source "$HOME/.aliases"
 [[ -f "$HOME/.localaliases" ]] && source "$HOME/.localaliases"
 
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-# configure ruby {
-#  if [[ -d "$HOME/.rvm" ]]; then
-#    export PATH="$PATH:$HOME/.rvm/bin"
-#    export NVM_DIR="$HOME/.nvm"
-#    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-#    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-#  fi
-# }
-# configure python {
-#  alias python=/usr/bin/python3
-#  export PY_SITE_PACKAGE="$(python3 -m site | grep tess/Library | grep , | sed -e "s/^ *\'\(.*\)\',/\1/")"
-## }
-#
-#if [[ -d "$PY_SITE_PACKAGE/powerline/" ]]; then
-#  export POWERLINE_ROOT="$PY_SITE_PACKAGE/powerline/"
-#  source $POWERLINE_ROOT/bindings/zsh/powerline.zsh
-#  echo "starting powerline daemon"
-#  powerline-daemon -q
-#fi
 
 HISTSIZE=10000000
 SAVEHIST=10000000
@@ -69,7 +50,6 @@ autoload -U down-line-or-beginning-search
 zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
 
-
 ### make keys not suck on mac
 bindkey -e
 backward-kill-dir () {
@@ -86,54 +66,8 @@ bindkey "^[^[[C" forward-word
 bindkey "^w" backward-kill-dir
 zplug load
 
-# Handy Gradle things
-# {
-  function upfind() {
-    dir=`pwd`
-    while [ "$dir" != "/" ]; do
-      p=`find "$dir" -maxdepth 1 -name $1`
-      if [ ! -z $p ]; then
-        echo "$p"
-        return
-      fi
-      dir=`dirname "$dir"`
-    done
-  }
-
-  function gw() {
-    GW="$(upfind gradlew)"
-    if [ -z "$GW" ]; then
-      echo "Gradle wrapper not found."
-    else
-      "$GW" -p $(dirname "$GW") --profile $@
-    fi
-  }
-
-  alias killd='jps | grep Daemon | cut -d'\'' '\'' -f1 | xargs kill -9'
-# }
-
 zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
 fpath=(~/.zsh $fpath)
-
-# Square development things
-if [ -z $SQUARE_HOME ] && [ -d "$HOME/Development" ]; then
-  export SQUARE_HOME=$HOME/Development
-fi
-
-
-if [[ ! -z "${POLYREPO}" ]]; then
-  export POLYREPO="${SQUARE_HOME}/polyrepo"
-fi
- 
-# Make backend bash aliases available
-if [[ -f "${POLYREPO}/cash-common/cash/script/backend_bash_aliases" ]]; then
-  source ${POLYREPO}/cash-common/cash/script/backend_bash_aliases
-fi
- 
-# Ensure JAVA_HOME is set to JDK 11
-export JAVA_HOME="$(/usr/libexec/java_home -v 11)"
-
-path+=(/Users/tess/Development/kotlin-language-server/server/build/install/server/bin/)
 
 typeset -U path PATH
 
