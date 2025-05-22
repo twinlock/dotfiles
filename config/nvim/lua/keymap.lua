@@ -28,7 +28,6 @@ vim.g.mapleader = ' '
 -- <leader>g => vim things (numbers, turn off search highlight)
 -- <leader>p => plugin things (nerd tree, eclim, etc)
 -- <leader>c => coc.nvim things (special plugin) 
--- ^^^ exception is ctrlp which is mapped to... ctrl+p
 
 -- WINDOWS! {
   -- make the current window size 100 (actually 106 to accomidate line numbers)
@@ -80,21 +79,12 @@ keymap('n', "Q", "@q", opts)
 vim.o.hidden = true
 -- ======= PLUGIN Keybindings=========
 -- PLUGINS! {
-  -- CtrlP {
-  -- I will forget these, so im mapping it to a bunch of things i may think of
-    keymap('n', "<leader>ppb", ":CtrlPBuffer<CR>", opts)
-    keymap('n', "<leader>ppp", ":CtrlPMixed<CR>", opts)
-    keymap('n', "<leader>ppo", ":CtrlPBuffer<CR>", opts)
-    keymap('n', "<leader>ppt", ":CtrlPTags<CR>", opts)
-    keymap('n', "<leader>ppm", ":CtrlPMRUFiles<CR>", opts)
-    keymap('n', "<leader>pph", ":CtrlPMRUFiles<CR>", opts)
-  -- }
   -- Neovim Tree {
-    keymap('n', "<leader>pntf", ":NvimTreeFindFile<CR>", opts)
-    keymap('n', "<leader>pnt", ":NvimTreeToggle<CR>", opts)
-  -- }
-  -- Vista {
-    keymap('n', "<leader>pvs", ":Vista!!<CR>", opts)
+    keymap('n', "<leader>pnt", ":Neotree source=last reveal=false<CR>", opts)
+    keymap('n', "<leader>pntf", ":Neotree source=filesystem reveal=true<CR>", opts)
+    keymap('n', "<leader>pntb", ":Neotree source=buffers <CR>", opts)
+  -- Document symbols
+    keymap('n', "<leader>po", ":Neotree position=right source=document_symbols<CR>", opts)
   -- }
   -- telescope {
   -- " Find files using Telescope command-line sugar.

@@ -1,0 +1,49 @@
+# remap prefix from 'C-b' to 'C-a'
+unbind C-b
+set-option -g prefix C-a
+bind-key C-a send-prefix
+
+#Reload Key
+bind r source-file ~/.tmux.conf
+
+# Start numbering at 1
+set -g base-index 1
+
+# Allows us to use C-a a <command> to send commands to a TMUX session inside
+# another TMUX session
+bind-key a send-prefix
+bind-key A last-window
+
+# split panes using | and _
+bind | split-window -h
+bind _ split-window -v
+unbind '"'
+unbind %
+
+# browser like behaviour
+bind -n C-t new-window
+bind -n C-w kill-window
+bind -n M-Tab next-window
+bind -n M-S-Tab previous-window
+
+## Toggle mouse on with prefix - m
+bind m \
+  set -g mouse on
+## Toggle mouse off with prefix - M
+bind M \
+  set -g mouse off
+
+# vim things, like copy-mode
+set-window-option -g mode-keys vi
+
+# fix colors
+set-option -ga terminal-overrides ",xterm-256color:Tc"
+set-option -g default-shell $SHELL
+
+#== Plugins ==#
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'erikw/tmux-powerline'
+
+
+# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+run '~/.tmux/plugins/tpm/tpm'

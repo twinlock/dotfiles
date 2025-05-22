@@ -1,4 +1,3 @@
-
 if [[ "$(uname)" == "Darwin" ]]; then
   export ZPLUG_HOME=/opt/homebrew/opt/zplug
 else
@@ -57,13 +56,15 @@ backward-kill-dir () {
     zle backward-kill-word
 }
 zle -N backward-kill-dir
-bindkey "^[[A" up-line-or-beginning-search # Up
-bindkey "^[[B" down-line-or-beginning-search # Down
-bindkey '^[[1;5D' beginning-of-line
-bindkey '^[[1;5C' end-of-line
-bindkey "^[^[[D" backward-word
-bindkey "^[^[[C" forward-word
-bindkey "^w" backward-kill-dir
+#if [[ "$(uname)" == "Darwin" ]]; then
+  bindkey "^[[A" up-line-or-beginning-search # Up
+  bindkey "^[[B" down-line-or-beginning-search # Down
+  bindkey '^[[1;5D' beginning-of-line
+  bindkey '^[[1;5C' end-of-line
+  bindkey "^[^[[D" backward-word
+  bindkey "^[^[[C" forward-word
+  bindkey "^w" backward-kill-dir
+#fi
 zplug load
 
 zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
@@ -72,3 +73,8 @@ fpath=(~/.zsh $fpath)
 typeset -U path PATH
 
 autoload -Uz compinit && compinit
+
+if [ -d "$HOME/bin/" ]; then
+  export PATH="$PATH:$HOME/bin/"
+fi
+

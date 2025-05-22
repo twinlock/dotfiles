@@ -58,6 +58,8 @@ then
     $install_cmd zsh
     $install_cmd zsh-completions
     $install_cmd rlwrap
+    $install_cmd ripgrep
+
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
