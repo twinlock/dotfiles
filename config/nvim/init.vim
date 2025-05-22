@@ -1,5 +1,4 @@
-:lua require('plugins')
-:lua require('keymap')
+:lua require('config.lazy')
 " source ~/.config/nvim/keymap.vim
 
 filetype plugin indent on
