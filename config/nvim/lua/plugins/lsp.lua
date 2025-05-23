@@ -1,20 +1,20 @@
 -- let's try to ignore this entire fucking file
 if true then
-  return {}
+	return {}
 end
 
 return {
-  -- LSP stuff
-  { "neovim/nvim-lspconfig" },
-  -- override nvim-cmp and add cmp-emoji
-  -- LSP source for nvim-cmp
-  -- Autocompletion plugin
-  --  { "hrsh7th/cmp-nvim-lsp" },
-  --  { "hrsh7th/nvim-cmp" },
-  --  -- Apparently it needs snippets
-  --  { "L3MON4D3/LuaSnip" },
-  --  -- Snippets source for nvim-cmp
-  --  { "saadparwaiz1/cmp_luasnip" },
+	-- LSP stuff
+	{ "neovim/nvim-lspconfig" },
+	-- override nvim-cmp and add cmp-emoji
+	-- LSP source for nvim-cmp
+	-- Autocompletion plugin
+	--  { "hrsh7th/cmp-nvim-lsp" },
+	--  { "hrsh7th/nvim-cmp" },
+	--  -- Apparently it needs snippets
+	--  { "L3MON4D3/LuaSnip" },
+	--  -- Snippets source for nvim-cmp
+	--  { "saadparwaiz1/cmp_luasnip" },
 }
 -- these are the old configs, leave them even though they don't really work.
 --local opts = { noremap = true, silent = true }
