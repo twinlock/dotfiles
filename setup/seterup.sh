@@ -14,7 +14,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
       echo "Installing Homebrew"
       # Install Homebrew
       # https://github.com/mxcl/homebrew/wiki/installation
-      /usr/bin/ruby -e "$(curl -fsSL https://raw.github.com/gist/323731)"
+      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     else
       echo "Homebrew Upating"
       brew update
