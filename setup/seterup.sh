@@ -27,7 +27,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
   fi
 elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
   # we assume debian
-  install_cmd="apt install"
+  install_cmd="sudo apt install"
   platform="Linux"
   read -p "Install Fonts?" -n 1 -r
   if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -53,7 +53,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   echo "Continuing"
 
   $install_cmd tmux
-  $install_cmd neovim
+  #$install_cmd neovim
   $install_cmd zsh
   $install_cmd zsh-completions
   $install_cmd rlwrap
