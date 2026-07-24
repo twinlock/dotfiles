@@ -1,8 +1,4 @@
-if [[ "$(uname)" == "Darwin" ]]; then
-  export ZPLUG_HOME=/opt/homebrew/opt/zplug
-else
-  export ZPLUG_HOME=$HOME/.zplug/
-fi
+export ZPLUG_HOME=$HOME/.zplug/
 source $ZPLUG_HOME/init.zsh
 
 # Allow more open files than the OSX default of 256
