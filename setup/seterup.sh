@@ -22,8 +22,8 @@ if [[ "$(uname)" == "Darwin" ]]; then
     brew tap homebrew/cask-fonts
     brew install --cask font-dejavu-sans-mono-nerd-font
     brew install --cask font-roboto-mono-nerd-font
-    brew install the_silver_searcher
-    brew install reattach-to-user-namespace
+    #brew install the_silver_searcher
+    #brew install reattach-to-user-namespace
   fi
 elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
   # we assume debian
@@ -53,7 +53,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   echo "Continuing"
 
   $install_cmd tmux
-  #$install_cmd neovim
+  $install_cmd neovim
   $install_cmd zsh
   $install_cmd zsh-completions
   $install_cmd rlwrap
@@ -95,13 +95,14 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   link_rc_local bashrc
   link_rc_local zshrc
   link_rc vimrc
-  mkdir -p $HOME/.config/nvim/
-  mkdir -p $HOME/.config/nvim/lua/
-  ln -sf "$DOTFILE_ROOT/config/nvim/init.vim" $HOME/.config/nvim/init.vim
-  ln -sf "$DOTFILE_ROOT/config/nvim/keymap.vim" $HOME/.config/nvim/keymap.vim
-  ln -sf "$DOTFILE_ROOT/config/nvim/plugins.vim" $HOME/.config/nvim/plugins.vim
-  ln -sf "$DOTFILE_ROOT/config/nvim/lua/keymap.lua" $HOME/.config/nvim/lua/keymap.lua
-  ln -sf "$DOTFILE_ROOT/config/nvim/lua/plugins.lua" $HOME/.config/nvim/lua/plugins.lua
+  # mkdir -p $HOME/.config/nvim/
+  # mkdir -p $HOME/.config/nvim/lua/
+  # ln -sf "$DOTFILE_ROOT/config/nvim/init.vim" $HOME/.config/nvim/init.vim
+  # ln -sf "$DOTFILE_ROOT/config/nvim/keymap.vim" $HOME/.config/nvim/keymap.vim
+  # ln -sf "$DOTFILE_ROOT/config/nvim/plugins.vim" $HOME/.config/nvim/plugins.vim
+  # ln -sf "$DOTFILE_ROOT/config/nvim/lua/keymap.lua" $HOME/.config/nvim/lua/keymap.lua
+  # ln -sf "$DOTFILE_ROOT/config/nvim/lua/plugins.lua" $HOME/.config/nvim/lua/plugins.lua
+  ln -sf "$DOTFILE_ROOT/config/nvim/*" $HOME/.config/nvim
   ln -sf "$DOTFILE_ROOT/config/powerline" $HOME/.config/powerline
   ln -sf "$DOTFILE_ROOT/tmux.conf" ~/.tmux.conf
   ln -sf "$DOTFILE_ROOT/aliases" ~/.aliases
@@ -116,4 +117,5 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   chsh -s $(which zsh)
   zsh
   zplug install
+  echo "You'll probobaly need to open a new terminal, then run zplug install"
 fi
