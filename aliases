@@ -34,6 +34,7 @@ function restart-bluetooth(){
   sudo kextload -b com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport
 }
 alias restartbluetooth='restart-blutooth'
+alias unity-editor='env GDK_SCALE=2 GDK_DPI_SCALE=0.75'
 
 # actually make go work
 unset GOFETCH_ALIASES

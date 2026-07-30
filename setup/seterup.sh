@@ -24,6 +24,9 @@ if [[ "$(uname)" == "Darwin" ]]; then
     brew install --cask font-roboto-mono-nerd-font
     #brew install the_silver_searcher
     #brew install reattach-to-user-namespace
+    # unity/c# dev: roslyn LS needs the dotnet sdk; toolbox manages rider
+    brew install --cask dotnet-sdk
+    brew install --cask jetbrains-toolbox
   fi
 elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
   # we assume debian
@@ -58,6 +61,12 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   $install_cmd zsh-completions
   $install_cmd rlwrap
   $install_cmd ripgrep
+  # unity/c# dev: roslyn LS needs the dotnet sdk (mac gets it via brew cask above)
+  # rider itself comes from the jetbrains toolbox app: mac via brew cask above,
+  # linux has no clean apt path - grab the tarball from jetbrains.com/toolbox-app
+  if [[ "$platform" == "Linux" ]]; then
+    $install_cmd dotnet-sdk-9.0
+  fi
 
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
@@ -95,6 +104,8 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   link_rc_local bashrc
   link_rc_local zshrc
   link_rc vimrc
+  # rider (and other jetbrains ides) read vim bindings from ~/.ideavimrc
+  link_rc ideavimrc
   # mkdir -p $HOME/.config/nvim/
   # mkdir -p $HOME/.config/nvim/lua/
   # ln -sf "$DOTFILE_ROOT/config/nvim/init.vim" $HOME/.config/nvim/init.vim
