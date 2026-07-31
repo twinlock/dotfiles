@@ -12,14 +12,14 @@ return {
 			vim.lsp.config("roslyn", {
 				-- the LS needs a newer .NET than the distro ships; use ~/.dotnet if present
 				cmd_env = vim.uv.fs_stat(dotnet_root) and { DOTNET_ROOT = dotnet_root } or nil,
-				-- compiler errors across the whole solution (so renaming a class flags
-				-- breakage in unopened files), but keep the heavier analyzer pass
-				-- scoped to open files - fullSolution for both can flood nvim on a
-				-- 130-project unity solution
+				-- keep analysis scoped to open files: fullSolution on a 130-project
+				-- unity solution floods nvim's core with diagnostics and hangs
+				-- :w/:qa. cross-file freshness comes from the BufWritePost re-pull
+				-- in config/autocmds.lua instead
 				settings = {
 					["csharp|background_analysis"] = {
 						dotnet_analyzer_diagnostics_scope = "openFiles",
-						dotnet_compiler_diagnostics_scope = "fullSolution",
+						dotnet_compiler_diagnostics_scope = "openFiles",
 					},
 				},
 			})

@@ -26,3 +26,28 @@ local function claim_unity_socket()
 end
 
 claim_unity_socket()
+
+-- C#: don't format on save. Roslyn formatting on a busy Unity solution can
+-- stall :w for seconds, and auto-reformatting Unity code is unwanted anyway.
+-- Format explicitly with <leader>cf when desired.
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "cs",
+	callback = function(ev)
+		vim.b[ev.buf].autoformat = false
+	end,
+})
+
+-- C#: after a save, re-pull diagnostics for the other open buffers so e.g. a
+-- class rename shows breakage elsewhere without needing :e. This is the cheap
+-- alternative to roslyn's fullSolution analysis scope (see plugins/csharp.lua).
+vim.api.nvim_create_autocmd("BufWritePost", {
+	pattern = "*.cs",
+	callback = function()
+		for _, client in ipairs(vim.lsp.get_clients({ name = "roslyn" })) do
+			pcall(vim.lsp.handlers["workspace/diagnostic/refresh"], nil, nil, {
+				client_id = client.id,
+				method = "workspace/diagnostic/refresh",
+			})
+		end
+	end,
+})
