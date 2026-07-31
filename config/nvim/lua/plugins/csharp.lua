@@ -22,6 +22,34 @@ return {
 						dotnet_compiler_diagnostics_scope = "openFiles",
 					},
 				},
+				handlers = {
+					-- until the solution finishes loading, roslyn serves buffers in
+					-- "misc files" mode (greyed usings, doubled symbols). once it's
+					-- ready, reload the affected buffers - same as a manual :e
+					["workspace/projectInitializationComplete"] = function(err, res, ctx)
+						local ok, orig = pcall(require, "roslyn.lsp.handlers")
+						if ok and orig["workspace/projectInitializationComplete"] then
+							orig["workspace/projectInitializationComplete"](err, res, ctx)
+						end
+						vim.schedule(function()
+							local client = vim.lsp.get_client_by_id(ctx.client_id)
+							if not client then
+								return
+							end
+							for buf in pairs(client.attached_buffers) do
+								if vim.api.nvim_buf_is_loaded(buf) then
+									if vim.bo[buf].modified then
+										vim.lsp.semantic_tokens.force_refresh(buf)
+									else
+										vim.api.nvim_buf_call(buf, function()
+											vim.cmd("silent! edit")
+										end)
+									end
+								end
+							end
+						end)
+					end,
+				},
 			})
 		end,
 		---@module 'roslyn.config'
