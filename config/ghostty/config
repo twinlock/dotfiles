@@ -16,3 +16,6 @@ confirm-close-surface = true
 
 # scrollback is tmux's job most of the time, but keep a sane local buffer
 scrollback-limit = 10000000
+
+# Theme: i like Lovelace, but 'Xcode Dark hc' and 'Aizen Dark'
+theme = Lovelace
