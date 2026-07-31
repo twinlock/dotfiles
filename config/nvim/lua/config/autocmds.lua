@@ -37,6 +37,25 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
+-- Repos with no committed formatter config: never format on save there.
+-- Manual <leader>cf still works.
+local no_autoformat_roots = {
+	vim.fn.expand("~/Development/Apps/stellr-gamepad"),
+	vim.fn.expand("~/Development/Apps/mythic-scribe"),
+}
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
+	group = vim.api.nvim_create_augroup("project_no_autoformat", { clear = true }),
+	callback = function(ev)
+		local file = vim.api.nvim_buf_get_name(ev.buf)
+		for _, root in ipairs(no_autoformat_roots) do
+			if file == root or vim.startswith(file, root .. "/") then
+				vim.b[ev.buf].autoformat = false
+				return
+			end
+		end
+	end,
+})
+
 -- C#: after a save, re-pull diagnostics for the other open buffers so e.g. a
 -- class rename shows breakage elsewhere without needing :e. This is the cheap
 -- alternative to roslyn's fullSolution analysis scope (see plugins/csharp.lua).

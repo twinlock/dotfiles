@@ -21,20 +21,6 @@ return {
 			}
 		end,
 	},
-	-- telescope, fast file fuzzy finder
-	{
-		"nvim-telescope/telescope.nvim",
-		branch = "0.1.x",
-		dependencies = { "nvim-lua/plenary.nvim" },
-		opts = {
-			defaults = {
-				layout_strategy = "horizontal",
-				layout_config = { prompt_position = "top" },
-				sorting_strategy = "ascending",
-				winblend = 0,
-			},
-		},
-	},
 	-- file explorer: LazyVim's snacks explorer (<leader>e) covers it; the old
 	-- custom neo-tree spec caused duplicated sources/symbol trees and is gone
 }
