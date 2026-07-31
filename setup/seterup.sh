@@ -29,6 +29,12 @@ if [[ "$(uname)" == "Darwin" ]]; then
     brew install --cask jetbrains-toolbox
     # terminal
     brew install --cask ghostty
+    # vim helpers
+    brew install lua
+    brew install luarocks
+    brew install fd
+    brew install rust
+    brew install python@3.12
   fi
 elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
   # we assume debian
@@ -63,6 +69,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   $install_cmd zsh-completions
   $install_cmd rlwrap
   $install_cmd ripgrep
+  $install_cmd imagemagick
   # unity/c# dev: roslyn LS needs the dotnet sdk (mac gets it via brew cask above)
   # rider itself comes from the jetbrains toolbox app: mac via brew cask above,
   # linux has no clean apt path - grab the tarball from jetbrains.com/toolbox-app
@@ -118,7 +125,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   # ln -sf "$DOTFILE_ROOT/config/nvim/plugins.vim" $HOME/.config/nvim/plugins.vim
   # ln -sf "$DOTFILE_ROOT/config/nvim/lua/keymap.lua" $HOME/.config/nvim/lua/keymap.lua
   # ln -sf "$DOTFILE_ROOT/config/nvim/lua/plugins.lua" $HOME/.config/nvim/lua/plugins.lua
-  ln -sf "$DOTFILE_ROOT/config/nvim/*" $HOME/.config/nvim
+  ln -sf "$DOTFILE_ROOT/config/nvim/" $HOME/.config/nvim
   ln -sf "$DOTFILE_ROOT/config/powerline" $HOME/.config/powerline
   ln -sfn "$DOTFILE_ROOT/config/ghostty" $HOME/.config/ghostty
   ln -sf "$DOTFILE_ROOT/tmux.conf" ~/.tmux.conf

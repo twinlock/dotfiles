@@ -3,7 +3,7 @@
 
 # font (installed by setup/seterup.sh on both platforms)
 font-family = DejaVuSansM Nerd Font
-font-size = 11
+font-size = 12
 
 # tab switching: alt+tab is free on linux (window switcher lives on ctrl-tab)
 # and maps to option+tab on macos. new-tab keeps platform defaults
