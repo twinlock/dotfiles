@@ -21,6 +21,7 @@ link_rc vimrc
 mkdir -p $HOME/.config/nvim/
 ln -sf $DOTFILE_ROOT/config/nvim/* $HOME/.config/nvim
 ln -sf $DOTFILE_ROOT/config/powerline $HOME/.config/powerline
+ln -sfn $DOTFILE_ROOT/config/ghostty $HOME/.config/ghostty
 ln -sf $DOTFILE_ROOT/tmux.conf ~/.tmux.conf
 ln -sf $DOTFILE_ROOT/aliases ~/.aliases
 ln -sf $DOTFILE_ROOT/bin ~/tess_bin

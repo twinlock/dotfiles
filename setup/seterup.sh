@@ -27,6 +27,8 @@ if [[ "$(uname)" == "Darwin" ]]; then
     # unity/c# dev: roslyn LS needs the dotnet sdk; toolbox manages rider
     brew install --cask dotnet-sdk
     brew install --cask jetbrains-toolbox
+    # terminal
+    brew install --cask ghostty
   fi
 elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
   # we assume debian
@@ -66,6 +68,9 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   # linux has no clean apt path - grab the tarball from jetbrains.com/toolbox-app
   if [[ "$platform" == "Linux" ]]; then
     $install_cmd dotnet-sdk-9.0
+    # terminal (mac gets it via brew cask above). ghostty has no ubuntu/mint repo
+    # pre-26.04; this is the installer ghostty.org officially links (handles mint)
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/mkasberg/ghostty-ubuntu/HEAD/install.sh)"
   fi
 
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
@@ -115,6 +120,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   # ln -sf "$DOTFILE_ROOT/config/nvim/lua/plugins.lua" $HOME/.config/nvim/lua/plugins.lua
   ln -sf "$DOTFILE_ROOT/config/nvim/*" $HOME/.config/nvim
   ln -sf "$DOTFILE_ROOT/config/powerline" $HOME/.config/powerline
+  ln -sfn "$DOTFILE_ROOT/config/ghostty" $HOME/.config/ghostty
   ln -sf "$DOTFILE_ROOT/tmux.conf" ~/.tmux.conf
   ln -sf "$DOTFILE_ROOT/aliases" ~/.aliases
   ln -sf "$DOTFILE_ROOT/bin" ~/tess_bin

@@ -1,0 +1,18 @@
+# ghostty config - shared between linux and macos
+# docs: https://ghostty.org/docs/config
+
+# font (installed by setup/seterup.sh on both platforms)
+font-family = DejaVuSansM Nerd Font
+font-size = 11
+
+# tab switching: alt+tab is free on linux (window switcher lives on ctrl-tab)
+# and maps to option+tab on macos. new-tab keeps platform defaults
+# (ctrl+shift+t linux, cmd+t mac).
+keybind = alt+tab=next_tab
+keybind = alt+shift+tab=previous_tab
+
+# don't quit the whole terminal because one confirm dialog was missed
+confirm-close-surface = true
+
+# scrollback is tmux's job most of the time, but keep a sane local buffer
+scrollback-limit = 10000000
