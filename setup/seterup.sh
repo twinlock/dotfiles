@@ -81,6 +81,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   fi
 
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+  git lfs install
 fi
 
 function link_rc_local() {
