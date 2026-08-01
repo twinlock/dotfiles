@@ -7,11 +7,14 @@ return {
 		ft = "cs",
 		init = function()
 			-- the roslyn LS needs a newer .NET runtime than the distro ships;
-			-- point just the LS process at the user-local install (~/.dotnet)
+			-- point just the LS process at the user-local install (~/.dotnet).
+			-- check for the host binary, not the bare dir: the CLI drops telemetry
+			-- sentinels in ~/.dotnet even without a runtime there (e.g. on macOS,
+			-- where the real install is /usr/local/share/dotnet and DOTNET_ROOT
+			-- must stay unset so the apphost falls back to it)
 			local dotnet_root = vim.fn.expand("~/.dotnet")
 			vim.lsp.config("roslyn", {
-				-- the LS needs a newer .NET than the distro ships; use ~/.dotnet if present
-				cmd_env = vim.uv.fs_stat(dotnet_root) and { DOTNET_ROOT = dotnet_root } or nil,
+				cmd_env = vim.uv.fs_stat(dotnet_root .. "/dotnet") and { DOTNET_ROOT = dotnet_root } or nil,
 				-- keep analysis scoped to open files: fullSolution on a 130-project
 				-- unity solution floods nvim's core with diagnostics and hangs
 				-- :w/:qa. cross-file freshness comes from the BufWritePost re-pull
@@ -63,12 +66,15 @@ return {
 			-- stick with the solution it attaches to (switch manually with :Roslyn target)
 			lock_target = true,
 			-- unity projects aren't git repos, so discovery can wander into sibling
-			-- projects; pick the sln whose folder is a unity project root above this file
+			-- projects; pick the sln whose folder is a unity project root above this
+			-- file. only .sln: the unity editor package regenerates .sln exclusively,
+			-- so a .slnx alongside it is a stale one-off from another tool
 			choose_target = function(targets)
 				local bufname = vim.api.nvim_buf_get_name(0)
 				return vim.iter(targets):find(function(target)
 					local dir = vim.fs.dirname(target)
-					return vim.uv.fs_stat(dir .. "/ProjectSettings") ~= nil
+					return target:sub(-4) == ".sln"
+						and vim.uv.fs_stat(dir .. "/ProjectSettings") ~= nil
 						and vim.startswith(bufname, dir .. "/")
 				end)
 			end,
