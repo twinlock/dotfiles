@@ -76,4 +76,8 @@ fi
 if [ -d "$HOME/.cargo/bin/" ]; then
   export PATH="$PATH:$HOME/.cargo/bin/"
 fi
+# scripts from the dotfiles repo (symlinked to ~/tess_bin by setup)
+if [ -d "$HOME/tess_bin/" ]; then
+  export PATH="$PATH:$HOME/tess_bin/"
+fi
 

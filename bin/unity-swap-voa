@@ -1,0 +1,204 @@
+#!/usr/bin/env python3
+"""Swap the VOA package between its git reference and a local file: reference.
+
+Working on shared VOA code from a consuming project (SkysailInn, HotPinkDetective)
+means pointing the package manifest at the local checkout instead of github. Doing
+that by hand is fiddly and easy to commit by accident, so:
+
+    unity-swap-voa            toggle
+    unity-swap-voa --local    force local checkout
+    unity-swap-voa --git      force github
+    unity-swap-voa --status   print current mode
+
+Run it anywhere inside a Unity project. A pre-commit hook that blocks committing
+the local reference is installed into the project's repo on every run.
+"""
+
+import argparse
+import json
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+PACKAGE = "com.tesswinlock.voaunity"
+# fallback only - the ref a project was actually using is remembered on swap
+GIT_REF = "git@github.com:Winluu/VOA-Unity.git#main"
+# the package repo lives inside the VOA-Unity dev project; override with $VOA_PACKAGE_PATH
+DEFAULT_PACKAGE_PATH = Path.home() / "Development/games/unity/VOA-Unity/Packages" / PACKAGE
+# Library/ is gitignored in every Unity project, so it's a safe place to stash the
+# git ref we replaced - swapping back restores it verbatim instead of guessing
+STATE_FILE = Path("Library") / "unity-swap-voa.json"
+
+HOOK_MARKER = "# installed by unity-swap-voa"
+HOOK = f"""#!/usr/bin/env bash
+{HOOK_MARKER}
+# Blocks commits that carry the local VOA override. Checks staged content, not
+# the worktree, so a local swap you haven't staged won't stop an unrelated commit.
+set -u
+
+for f in Packages/manifest.json Packages/packages-lock.json; do
+  git show ":$f" 2>/dev/null | grep -q '"{PACKAGE}".*file:' || continue
+  cat >&2 <<'MSG'
+pre-commit: VOA is staged with the local override (file: reference).
+
+Switch it back before committing:
+    unity-swap-voa --git
+
+That leaves your local VOA edits alone - it only changes this project's manifest.
+If you really mean to commit the override, use: git commit --no-verify
+MSG
+  exit 1
+done
+
+exit 0
+"""
+
+
+def fail(msg):
+    print(f"unity-swap-voa: {msg}", file=sys.stderr)
+    sys.exit(1)
+
+
+def find_project(start: Path) -> Path:
+    """Walk up from start looking for a Unity project with a package manifest."""
+    for d in [start, *start.parents]:
+        if (d / "Packages" / "manifest.json").is_file():
+            return d
+    fail(f"no Unity project found at or above {start}\n"
+         "  (looked for Packages/manifest.json)")
+
+
+def load(path: Path):
+    try:
+        return json.loads(path.read_text())
+    except json.JSONDecodeError as e:
+        fail(f"{path} is not valid JSON: {e}")
+
+
+def save(path: Path, data):
+    """Write back in Unity's own format so diffs stay minimal."""
+    path.write_text(json.dumps(data, indent=2) + "\n")
+
+
+def package_path() -> Path:
+    return Path(os.environ.get("VOA_PACKAGE_PATH", DEFAULT_PACKAGE_PATH)).expanduser()
+
+
+def local_ref(project: Path) -> str:
+    """UPM resolves relative file: paths from the project's Packages directory."""
+    rel = os.path.relpath(package_path().resolve(), (project / "Packages").resolve())
+    return f"file:{rel}"
+
+
+def current_mode(manifest_data) -> str:
+    ref = manifest_data.get("dependencies", {}).get(PACKAGE)
+    if ref is None:
+        return "absent"
+    return "local" if ref.startswith("file:") else "git"
+
+
+def install_hook(project: Path):
+    """Idempotent: write our hook, but never clobber someone else's."""
+    hooks = project / ".git" / "hooks"
+    if not hooks.is_dir():
+        return  # not a git repo (or a worktree/submodule we shouldn't touch)
+
+    hook = hooks / "pre-commit"
+    if hook.exists() and HOOK_MARKER not in hook.read_text():
+        print(f"  note: {hook} exists and isn't ours - leaving it alone")
+        return
+
+    if hook.exists() and hook.read_text() == HOOK:
+        return
+
+    hook.write_text(HOOK)
+    hook.chmod(0o755)
+    print(f"  installed pre-commit hook -> {hook}")
+
+
+def swap(project: Path, target: str):
+    manifest_path = project / "Packages" / "manifest.json"
+    lock_path = project / "Packages" / "packages-lock.json"
+
+    manifest = load(manifest_path)
+    deps = manifest.get("dependencies", {})
+    if PACKAGE not in deps:
+        fail(f"{manifest_path} has no {PACKAGE} dependency\n"
+             f"  (is {project.name} actually a VOA consumer?)")
+
+    old_ref = deps[PACKAGE]
+    state_path = project / STATE_FILE
+
+    if target == "local":
+        pkg = package_path()
+        if not (pkg / "package.json").is_file():
+            fail(f"no VOA package at {pkg}\n"
+                 "  set $VOA_PACKAGE_PATH if it lives somewhere else")
+        new_ref = local_ref(project)
+    else:
+        # restore whatever ref this project had before we swapped it away
+        new_ref = GIT_REF
+        if state_path.is_file():
+            remembered = load(state_path).get("git_ref")
+            if remembered:
+                new_ref = remembered
+    if old_ref == new_ref:
+        print(f"{project.name}: already {target} ({new_ref})")
+        install_hook(project)
+        return
+
+    if target == "local":
+        # remember the ref we're replacing so --git can put it back exactly
+        state_path.parent.mkdir(parents=True, exist_ok=True)
+        save(state_path, {"git_ref": old_ref})
+
+    deps[PACKAGE] = new_ref
+    save(manifest_path, manifest)
+
+    # Drop only this package's lock entry so Unity re-resolves it; every other
+    # pinned dependency keeps its hash.
+    if lock_path.is_file():
+        lock = load(lock_path)
+        if lock.get("dependencies", {}).pop(PACKAGE, None) is not None:
+            save(lock_path, lock)
+
+    print(f"{project.name}: {target}")
+    print(f"  {old_ref}")
+    print(f"  -> {new_ref}")
+    if target == "local":
+        print("  (unity will re-resolve on next editor focus; don't commit this)")
+    install_hook(project)
+
+
+def main():
+    ap = argparse.ArgumentParser(
+        description="Swap the VOA package between git and a local checkout.")
+    group = ap.add_mutually_exclusive_group()
+    group.add_argument("--git", action="store_const", dest="mode", const="git",
+                       help="force the github reference")
+    group.add_argument("--local", action="store_const", dest="mode", const="local",
+                       help="force the local checkout")
+    group.add_argument("--status", action="store_true",
+                       help="print the current mode and exit")
+    ap.add_argument("path", nargs="?", default=".",
+                    help="a path inside the Unity project (default: cwd)")
+    args = ap.parse_args()
+
+    project = find_project(Path(args.path).resolve())
+    manifest = load(project / "Packages" / "manifest.json")
+    mode = current_mode(manifest)
+
+    if mode == "absent":
+        fail(f"{project.name} has no {PACKAGE} dependency")
+
+    if args.status:
+        print(f"{project.name}: {mode}")
+        print(f"  {manifest['dependencies'][PACKAGE]}")
+        return
+
+    swap(project, args.mode or ("git" if mode == "local" else "local"))
+
+
+if __name__ == "__main__":
+    main()

@@ -66,3 +66,7 @@ alias eclim="start_eclim"
 if [[ -d "$PYENV_ROOT/versions/gcloud" ]]; then
   export CLOUDSDK_PYTHON="$PYENV_ROOT/versions/gcloud/bin/python"
 fi
+# scripts from the dotfiles repo (symlinked to ~/tess_bin by setup)
+if [ -d "$HOME/tess_bin/" ]; then
+  export PATH="$PATH:$HOME/tess_bin/"
+fi
