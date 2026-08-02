@@ -30,10 +30,15 @@ claim_unity_socket()
 -- C#: don't format on save. Roslyn formatting on a busy Unity solution can
 -- stall :w for seconds, and auto-reformatting Unity code is unwanted anyway.
 -- Format explicitly with <leader>cf when desired.
+-- Also indent with 4 spaces (C#/Unity convention) instead of the global 2.
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "cs",
 	callback = function(ev)
 		vim.b[ev.buf].autoformat = false
+		vim.bo[ev.buf].expandtab = true
+		vim.bo[ev.buf].shiftwidth = 4
+		vim.bo[ev.buf].softtabstop = 4
+		vim.bo[ev.buf].tabstop = 4
 	end,
 })
 
