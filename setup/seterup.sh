@@ -52,6 +52,11 @@ elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
     done
     fc-cache -fv
   fi
+  read -p "Update Inotify instances (required for unity dev)?" -n 1 -r
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo 'fs.inotify.max_user_instances = 1024' | sudo tee /etc/sysctl.d/60-inotify.conf && sudo sysctl --system
+  fi
+  sudo apt install python3-venv
 elif [[ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]]; then
   echo "setup script doesn't work on windows"
   exit 0
