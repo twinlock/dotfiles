@@ -1,0 +1,209 @@
+#!/usr/bin/env python3
+"""Run a Windows build under Proton via umu-launcher.
+
+Testing a Unity Windows build on Linux means umu-run plus a pile of environment
+variables you have to get right every time. This wraps that:
+
+    umu-proton path/to/Game.exe                 run it
+    umu-proton --windowed Game.exe              windowed 1280x720 (good first run)
+    umu-proton --size 1920x1080 Game.exe        windowed at a specific size
+    umu-proton --gpu intel Game.exe             force the integrated GPU
+    umu-proton --proton GE-Proton Game.exe      use GE-Proton instead of UMU-Proton
+    umu-proton --find-log Game.exe              just print where Player.log is
+    umu-proton -n Game.exe                      print the command, run nothing
+
+Each game gets its own wine prefix under ~/Games/umu, named after the exe, so
+HotPinkDetective and SkysailInn never share state. Anything after the exe is
+passed through to the game:
+
+    umu-proton Game.exe -force-vulkan -screen-fullscreen 0
+
+Linux only - umu-launcher has no macOS build.
+"""
+
+import argparse
+import os
+import platform
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+PREFIX_ROOT = Path.home() / "Games" / "umu"
+# umu looks up per-game protonfixes by this id; 0 means "no fixes", which is what
+# you want when testing your own build - otherwise you're testing someone's patches
+DEFAULT_GAMEID = "0"
+
+# Unity's Windows player calls UiaDisconnectAllProviders (accessibility teardown)
+# as its last act on quit. Wine implements it in master but not in every Proton
+# branch, so a clean exit can still abort. Harmless - everything is already torn
+# down - but it surfaces as a non-zero exit, which is confusing without context.
+UIA_ABORT = "UiaDisconnectAllProviders"
+
+
+def fail(msg):
+    print(f"umu-proton: {msg}", file=sys.stderr)
+    sys.exit(1)
+
+
+def gpu_env(choice: str) -> dict:
+    """Env vars to pin rendering to a specific GPU on a hybrid laptop.
+
+    Note that D3D12 titles go through VKD3D and tend to pick the discrete card on
+    their own, so 'nvidia' is often a no-op and 'intel' is the one you actually need.
+    """
+    if choice == "nvidia":
+        return {
+            "__NV_PRIME_RENDER_OFFLOAD": "1",
+            "__VK_LAYER_NV_optimus": "NVIDIA_only",
+            "__GLX_VENDOR_LIBRARY_NAME": "nvidia",
+        }
+    if choice == "intel":
+        # both, because we don't know up front whether the game lands on
+        # DXVK (D3D9/10/11) or VKD3D (D3D12)
+        return {
+            "DXVK_FILTER_DEVICE_NAME": "Intel",
+            "VKD3D_FILTER_DEVICE_NAME": "Intel",
+        }
+    return {}
+
+
+def find_player_log(prefix: Path):
+    """Locate Unity's Player.log inside a prefix.
+
+    The path embeds the game's company and product name, which we don't know, so
+    glob for it. drive_c sits directly under the prefix for umu, but check pfx/
+    too since plain Proton prefixes nest it there.
+    """
+    seen = []
+    for base in (prefix, prefix / "pfx"):
+        appdata = base / "drive_c/users/steamuser/AppData/LocalLow"
+        if appdata.is_dir():
+            seen.extend(appdata.glob("*/*/Player.log"))
+    # newest wins - a prefix reused across games can hold several
+    return max(seen, key=lambda p: p.stat().st_mtime, default=None)
+
+
+def main():
+    ap = argparse.ArgumentParser(
+        description="Run a Windows build under Proton via umu-launcher.",
+        epilog="Anything after the exe is passed through to the game.")
+    ap.add_argument("exe", help="path to the Windows .exe")
+    ap.add_argument("game_args", nargs=argparse.REMAINDER,
+                    help="arguments passed through to the game")
+    ap.add_argument("--prefix", metavar="NAME|PATH",
+                    help=f"wine prefix (default: {PREFIX_ROOT}/<exe name>)")
+    ap.add_argument("--gpu", choices=("auto", "nvidia", "intel"), default="auto",
+                    help="pin rendering to a GPU (default: auto)")
+    ap.add_argument("--proton", metavar="REF",
+                    help="'GE-Proton' to fetch the latest GE build, or a path to a "
+                         "Proton install (default: umu's own UMU-Proton)")
+    ap.add_argument("--gameid", default=os.environ.get("GAMEID", DEFAULT_GAMEID),
+                    help=f"umu game id for protonfixes (default: {DEFAULT_GAMEID})")
+    # deliberately a flag rather than an optional-value argument: with nargs='?'
+    # argparse swallows the exe path as its value
+    ap.add_argument("--windowed", action="store_true",
+                    help="run windowed (see --size); worth doing on a first run so a "
+                         "fullscreen failure can't lock up the display")
+    ap.add_argument("--size", metavar="WxH", default="1280x720",
+                    help="window size, implies --windowed (default: 1280x720)")
+    ap.add_argument("--hud", action="store_true",
+                    help="overlay fps and the GPU actually in use")
+    ap.add_argument("--proton-log", action="store_true",
+                    help="PROTON_LOG=1, for crashes that happen before Unity starts")
+    ap.add_argument("--find-log", action="store_true",
+                    help="print the path to Player.log and exit without running")
+    ap.add_argument("-n", "--dry-run", action="store_true",
+                    help="print the command and environment, run nothing")
+    args = ap.parse_args()
+
+    if platform.system() != "Linux":
+        fail(f"umu-launcher is Linux only (this is {platform.system()})")
+
+    exe = Path(args.exe).expanduser().resolve()
+    if not exe.is_file():
+        fail(f"no such file: {exe}")
+    if exe.suffix.lower() != ".exe":
+        fail(f"not a Windows executable: {exe.name}")
+
+    # a bare name goes under PREFIX_ROOT; anything path-shaped is used as given
+    if args.prefix and ("/" in args.prefix or args.prefix.startswith("~")):
+        prefix = Path(args.prefix).expanduser().resolve()
+    else:
+        prefix = PREFIX_ROOT / (args.prefix or exe.stem.lower())
+
+    if args.find_log:
+        log = find_player_log(prefix)
+        if log is None:
+            fail(f"no Player.log under {prefix}\n"
+                 "  (has the game been run with this prefix yet?)")
+        print(log)
+        return
+
+    if not shutil.which("umu-run"):
+        fail("umu-run not found on PATH\n"
+             "  install umu-launcher: https://github.com/Open-Wine-Components/umu-launcher")
+
+    env = {"WINEPREFIX": str(prefix), "GAMEID": args.gameid}
+    env.update(gpu_env(args.gpu))
+    if args.proton:
+        # GE-Proton is a magic value umu resolves itself; anything else is a path
+        env["PROTONPATH"] = (args.proton if args.proton == "GE-Proton"
+                             else str(Path(args.proton).expanduser().resolve()))
+    if args.hud:
+        # DXVK_HUD only covers D3D9/10/11; VKD3D has no HUD of its own, so lean on
+        # MangoHud for D3D12 titles (ignored if mangohud isn't installed)
+        env["DXVK_HUD"] = "fps,devinfo"
+        env["MANGOHUD"] = "1"
+    if args.proton_log:
+        env["PROTON_LOG"] = "1"
+
+    # REMAINDER keeps a leading '--' if the user typed one; the game shouldn't see it
+    game_args = args.game_args
+    if game_args and game_args[0] == "--":
+        game_args = game_args[1:]
+
+    if args.windowed or args.size != ap.get_default("size"):
+        try:
+            w, h = args.size.lower().split("x")
+            int(w), int(h)
+        except ValueError:
+            fail(f"--size wants WxH, got {args.size!r}")
+        game_args = ["-screen-fullscreen", "0",
+                     "-screen-width", w, "-screen-height", h] + game_args
+
+    cmd = ["umu-run", str(exe), *game_args]
+
+    if args.dry_run:
+        for k, v in sorted(env.items()):
+            print(f"{k}={v}")
+        print(" ".join(cmd))
+        return
+
+    prefix.mkdir(parents=True, exist_ok=True)
+    # flush before handing the terminal to the child, or this line lands after the
+    # game's output when stdout is redirected to a file
+    print(f"umu-proton: {exe.name}  prefix={prefix}", flush=True)
+
+    # run from the exe's directory: Unity resolves _Data relative to the binary,
+    # and some builds assume cwd is alongside it
+    result = subprocess.run(cmd, cwd=exe.parent, env={**os.environ, **env})
+
+    log = find_player_log(prefix)
+    if log:
+        print(f"\nPlayer.log: {log}")
+
+    if result.returncode != 0:
+        print(f"\nexited {result.returncode}", file=sys.stderr)
+        # wine writes this to its own stderr, not to Player.log, so we can't detect
+        # it without swallowing the game's output - just say where to look
+        print(f"  if the output above mentions {UIA_ABORT}, that's Unity's quit-time\n"
+              "  accessibility teardown hitting a Wine stub. Check the tail of\n"
+              "  Player.log: a clean shutdown before it means the run itself was fine.",
+              file=sys.stderr)
+
+    sys.exit(result.returncode)
+
+
+if __name__ == "__main__":
+    main()

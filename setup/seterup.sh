@@ -87,6 +87,16 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
   git lfs install
+
+  # unity debugging in nvim (config/nvim/lua/plugins/dap.lua) runs the vstuc debug
+  # adapter, which is a net10 app - newer than the sdk installed above. Drop a
+  # runtime-only install in ~/.dotnet, which is also where roslyn.nvim looks.
+  # Mac is deliberately skipped: csharp.lua leaves DOTNET_ROOT unset there so the
+  # apphost finds brew's /usr/local/share/dotnet, and a ~/.dotnet would shadow it.
+  if [[ "$platform" == "Linux" ]]; then
+    curl -fsSL https://dot.net/v1/dotnet-install.sh | bash -s -- --channel 10.0 --runtime dotnet
+  fi
+  "$DOTFILE_ROOT/bin/vstuc-install"
 fi
 
 function link_rc_local() {
