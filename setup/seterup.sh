@@ -144,6 +144,10 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   ln -sf "$DOTFILE_ROOT/config/nvim/" $HOME/.config/nvim
   ln -sf "$DOTFILE_ROOT/config/powerline" $HOME/.config/powerline
   ln -sfn "$DOTFILE_ROOT/config/ghostty" $HOME/.config/ghostty
+  # claude code reads global instructions from ~/.claude/CLAUDE.md. link just the
+  # file, not the dir - ~/.claude also holds live state (sessions, cache, plugins)
+  mkdir -p "$HOME/.claude"
+  ln -sf "$DOTFILE_ROOT/config/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
   ln -sf "$DOTFILE_ROOT/tmux.conf" ~/.tmux.conf
   ln -sf "$DOTFILE_ROOT/aliases" ~/.aliases
   ln -sf "$DOTFILE_ROOT/bin" ~/tess_bin
